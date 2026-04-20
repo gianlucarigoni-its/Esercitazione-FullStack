@@ -5,7 +5,6 @@ node_modules/
 
 # =========================
 #  VARIABILI D'AMBIENTE
-#  NON caricare mai file .env — contengono segreti (db uri, chiavi api, ecc.)
 # =========================
 .env
 .env.*
