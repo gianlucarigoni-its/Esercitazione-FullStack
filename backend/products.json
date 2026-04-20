@@ -1,0 +1,1602 @@
+[
+    {
+        "id": "8fdf8dae0cd760ff8e7af2b2",
+        "name": "Chair",
+        "description": "Our cow-friendly Shoes ensures probable comfort for your pets",
+        "netPrice": 971.79,
+        "weight": 1517,
+        "discount": 0.14
+    },
+    {
+        "id": "d39ecdcbd0df16891b28cbee",
+        "name": "Ball",
+        "description": "The mission-critical progressiva Moratoria Towels offers reliable performance and simplistic design",
+        "netPrice": 366.29,
+        "weight": 1746,
+        "discount": 0.21
+    },
+    {
+        "id": "a6cda3e9c47825dffade3cf0",
+        "name": "Bike",
+        "description": "The sleek and untried Salad comes with lime LED lighting for smart functionality",
+        "netPrice": 971.69,
+        "weight": 1668,
+        "discount": 0.23
+    },
+    {
+        "id": "b9daeeb8252faeeaa93aa621",
+        "name": "Pants",
+        "description": "Stylish Tuna designed to make you stand out with unaware looks",
+        "netPrice": 974.39,
+        "weight": 1252,
+        "discount": 0.62
+    },
+    {
+        "id": "1a781c91ea4abd18030dbefc",
+        "name": "Soap",
+        "description": "Sevi, Benetti e Adamo Group's most advanced Towels technology increases dependent capabilities",
+        "netPrice": 783.39,
+        "weight": 265,
+        "discount": 0.26
+    },
+    {
+        "id": "aae1ac2eeddc1ed65bb1daa9",
+        "name": "Chicken",
+        "description": "Savor the crispy essence in our Shoes, designed for colorless culinary adventures",
+        "netPrice": 134.59,
+        "weight": 907,
+        "discount": 0.95
+    },
+    {
+        "id": "1b6a4bcc7a5bfc11eee34bfc",
+        "name": "Towels",
+        "description": "The Sviturno Chips is the latest in a series of sinful products from Martucci SPA",
+        "netPrice": 942.59,
+        "weight": 430,
+        "discount": 0.06
+    },
+    {
+        "id": "ff523709ff81bdc95b19f25f",
+        "name": "Bacon",
+        "description": "Salerno-Amabile SPA's most advanced Towels technology increases outlandish capabilities",
+        "netPrice": 426.69,
+        "weight": 121,
+        "discount": 0.56
+    },
+    {
+        "id": "ad7cbe39be2ccd2213f457c2",
+        "name": "Shirt",
+        "description": "Experience the gold brilliance of our Shirt, perfect for obvious environments",
+        "netPrice": 240.49,
+        "weight": 1059,
+        "discount": 0.51
+    },
+    {
+        "id": "6ad7aad9af02b322dc5f7d3d",
+        "name": "Ball",
+        "description": "The object-oriented implementata Sito web Towels offers reliable performance and clear design",
+        "netPrice": 378.4,
+        "weight": 1992,
+        "discount": 0.35
+    },
+    {
+        "id": "97bbcfa79dabdc0451cdef51",
+        "name": "Bike",
+        "description": "Discover the forceful new Tuna with an exciting mix of Metal ingredients",
+        "netPrice": 513.6,
+        "weight": 1330,
+        "discount": 0.1
+    },
+    {
+        "id": "2eb0ae24ffcee5c2ee18de12",
+        "name": "Mouse",
+        "description": "Experience the blue brilliance of our Car, perfect for wavy environments",
+        "netPrice": 5.14,
+        "weight": 1702,
+        "discount": 0.35
+    },
+    {
+        "id": "dc58cb4731fca20a75fcb3df",
+        "name": "Fish",
+        "description": "Our rich-inspired Pants brings a taste of luxury to your polished lifestyle",
+        "netPrice": 903.85,
+        "weight": 1196,
+        "discount": 0.73
+    },
+    {
+        "id": "fe3e4b0e9d772772f3cedc55",
+        "name": "Car",
+        "description": "Featuring Lithium-enhanced technology, our Pants offers unparalleled dismal performance",
+        "netPrice": 233.39,
+        "weight": 1730,
+        "discount": 0.11
+    },
+    {
+        "id": "f16b51e220e54cabfdad8f8c",
+        "name": "Chips",
+        "description": "New turquoise Fish with ergonomic design for wicked comfort",
+        "netPrice": 136.19,
+        "weight": 1064,
+        "discount": 0.91
+    },
+    {
+        "id": "ed9d3ce8f605277e98db7f1e",
+        "name": "Towels",
+        "description": "The Silverio Chicken is the latest in a series of knotty products from Pasini SPA",
+        "netPrice": 686.99,
+        "weight": 538,
+        "discount": 0.57
+    },
+    {
+        "id": "38933aeeed9b0fdfd90f2303",
+        "name": "Tuna",
+        "description": "Savor the smoky essence in our Shoes, designed for lumpy culinary adventures",
+        "netPrice": 636.9,
+        "weight": 1886,
+        "discount": 0.35
+    },
+    {
+        "id": "aff04d6a4e034719b98139bb",
+        "name": "Pizza",
+        "description": "Experience the silver brilliance of our Shoes, perfect for warlike environments",
+        "netPrice": 203.19,
+        "weight": 653,
+        "discount": 0.55
+    },
+    {
+        "id": "d8389f48fd6c94aaf0b61cd7",
+        "name": "Chicken",
+        "description": "Innovative Sausages featuring rubbery technology and Bamboo construction",
+        "netPrice": 504.25,
+        "weight": 833,
+        "discount": 0.64
+    },
+    {
+        "id": "645155be2e98baba408bed6a",
+        "name": "Table",
+        "description": "Ergonomic Keyboard made with Rubber for all-day far-off support",
+        "netPrice": 229.05,
+        "weight": 1618,
+        "discount": 0.03
+    },
+    {
+        "id": "681201f98bed45e5cb8a36c7",
+        "name": "Hat",
+        "description": "Introducing the Burundi-inspired Chair, blending realistic style with local craftsmanship",
+        "netPrice": 881.79,
+        "weight": 719,
+        "discount": 0.39
+    },
+    {
+        "id": "ca36e98a2a7648edc41ea60f",
+        "name": "Towels",
+        "description": "Professional-grade Pizza perfect for pertinent training and recreational use",
+        "netPrice": 236.95,
+        "weight": 878,
+        "discount": 0.99
+    },
+    {
+        "id": "ba988df8c518b7eab8ac41b4",
+        "name": "Bacon",
+        "description": "Durante-Giraudo s.r.l.'s most advanced Table technology increases ashamed capabilities",
+        "netPrice": 372.75,
+        "weight": 1070,
+        "discount": 0.34
+    },
+    {
+        "id": "f6f0fff6fa64cb44d093a7a9",
+        "name": "Sausages",
+        "description": "Ergonomic Soap made with Bronze for all-day trim support",
+        "netPrice": 383.79,
+        "weight": 494,
+        "discount": 0.79
+    },
+    {
+        "id": "029afccd0c29be1ceba6b8d1",
+        "name": "Fish",
+        "description": "Discover the tame new Chair with an exciting mix of Silk ingredients",
+        "netPrice": 866.75,
+        "weight": 1258,
+        "discount": 0.18
+    },
+    {
+        "id": "f6a190adfc3dab1e4bcbffdb",
+        "name": "Salad",
+        "description": "New olive Soap with ergonomic design for likely comfort",
+        "netPrice": 505.72,
+        "weight": 1121,
+        "discount": 0.98
+    },
+    {
+        "id": "afcecbaebbec9fe1c850db9e",
+        "name": "Pizza",
+        "description": "The Liborio Keyboard is the latest in a series of immediate products from Cecchi Group",
+        "netPrice": 115.69,
+        "weight": 1927,
+        "discount": 0.39
+    },
+    {
+        "id": "bffef5e2b5c8b781cfcb00eb",
+        "name": "Shoes",
+        "description": "Innovative Shirt featuring appropriate technology and Gold construction",
+        "netPrice": 140.59,
+        "weight": 177,
+        "discount": 0.76
+    },
+    {
+        "id": "fca6ccb9284f040c25d3a21b",
+        "name": "Chicken",
+        "description": "Professional-grade Hat perfect for ample training and recreational use",
+        "netPrice": 566.49,
+        "weight": 817,
+        "discount": 0.6
+    },
+    {
+        "id": "8bce4bb2a1b2a58dccccbdfb",
+        "name": "Keyboard",
+        "description": "Discover the bird-like agility of our Salad, perfect for orderly users",
+        "netPrice": 42.19,
+        "weight": 259,
+        "discount": 0.75
+    },
+    {
+        "id": "c72693aaad457469ce1be89a",
+        "name": "Bacon",
+        "description": "New Towels model with 72 GB RAM, 128 GB storage, and dapper features",
+        "netPrice": 10.95,
+        "weight": 145,
+        "discount": 1
+    },
+    {
+        "id": "f2f44ecd4cfa5f353ddbfca1",
+        "name": "Chips",
+        "description": "Savor the fresh essence in our Salad, designed for smart culinary adventures",
+        "netPrice": 138.15,
+        "weight": 778,
+        "discount": 0.07
+    },
+    {
+        "id": "8eccecacc1321fc0ef4eabea",
+        "name": "Fish",
+        "description": "New purple Bacon with ergonomic design for unwelcome comfort",
+        "netPrice": 132.69,
+        "weight": 1078,
+        "discount": 0.34
+    },
+    {
+        "id": "c3fa4c26d5d827b2ccb9a6c5",
+        "name": "Table",
+        "description": "Stylish Mouse designed to make you stand out with compassionate looks",
+        "netPrice": 933.79,
+        "weight": 239,
+        "discount": 0.4
+    },
+    {
+        "id": "e6bc028b448bdca435dde89c",
+        "name": "Computer",
+        "description": "Our horse-friendly Towels ensures flawless comfort for your pets",
+        "netPrice": 214.49,
+        "weight": 158,
+        "discount": 0.78
+    },
+    {
+        "id": "2afdd5a273da6fadf5f8ff4d",
+        "name": "Chips",
+        "description": "The statica avanzata Soluzione internet Table offers reliable performance and poor design",
+        "netPrice": 544.29,
+        "weight": 1325,
+        "discount": 0.64
+    },
+    {
+        "id": "bf8deccab4dbbdbe7887546e",
+        "name": "Table",
+        "description": "Handmade Pants designed with Bamboo for actual performance",
+        "netPrice": 849.69,
+        "weight": 794,
+        "discount": 0.38
+    },
+    {
+        "id": "24475cfd2d0f163eacebc034",
+        "name": "Pants",
+        "description": "Experience the orange brilliance of our Gloves, perfect for fantastic environments",
+        "netPrice": 225.59,
+        "weight": 585,
+        "discount": 0.42
+    },
+    {
+        "id": "aad7cdee7f4a6cc4e7bfcddd",
+        "name": "Shoes",
+        "description": "Introducing the Malawi-inspired Shoes, blending spotless style with local craftsmanship",
+        "netPrice": 119.49,
+        "weight": 1022,
+        "discount": 0.69
+    },
+    {
+        "id": "3070930ce72cdbbcfa33eaba",
+        "name": "Fish",
+        "description": "Our rich-inspired Salad brings a taste of luxury to your amazing lifestyle",
+        "netPrice": 566.25,
+        "weight": 1899,
+        "discount": 0.78
+    },
+    {
+        "id": "1eab88ff06a49b635ad351e9",
+        "name": "Hat",
+        "description": "Lazzaro, Di Vita e Cucchiara Group's most advanced Sausages technology increases agitated capabilities",
+        "netPrice": 700.62,
+        "weight": 1682,
+        "discount": 0.26
+    },
+    {
+        "id": "b2ef532fa72ea7ccef02cad4",
+        "name": "Gloves",
+        "description": "The sleek and linear Table comes with mint green LED lighting for smart functionality",
+        "netPrice": 974.45,
+        "weight": 1990,
+        "discount": 0.21
+    },
+    {
+        "id": "ecf1bbe0d6db3cab3c5e6ac0",
+        "name": "Mouse",
+        "description": "New grey Soap with ergonomic design for slow comfort",
+        "netPrice": 225.7,
+        "weight": 493,
+        "discount": 0.05
+    },
+    {
+        "id": "002ba19a96d5fe821b8bec7a",
+        "name": "Chair",
+        "description": "The sleek and assured Bacon comes with lavender LED lighting for smart functionality",
+        "netPrice": 494.19,
+        "weight": 1345,
+        "discount": 0.49
+    },
+    {
+        "id": "318ecefac7d790b941db4fe1",
+        "name": "Chair",
+        "description": "Savor the sour essence in our Hat, designed for standard culinary adventures",
+        "netPrice": 47.59,
+        "weight": 196,
+        "discount": 0.1
+    },
+    {
+        "id": "2edcedaed00c78ae32e4adf3",
+        "name": "Chips",
+        "description": "The intermediaria piccola Intranet Car offers reliable performance and mean design",
+        "netPrice": 306.17,
+        "weight": 774,
+        "discount": 0.74
+    },
+    {
+        "id": "d964d74b7fe76f7f3a00ef3f",
+        "name": "Computer",
+        "description": "Discover the snake-like agility of our Computer, perfect for some users",
+        "netPrice": 735.19,
+        "weight": 1628,
+        "discount": 1
+    },
+    {
+        "id": "8f3b1df7babd03eadd6644b2",
+        "name": "Bike",
+        "description": "Savor the bitter essence in our Cheese, designed for compassionate culinary adventures",
+        "netPrice": 173.79,
+        "weight": 634,
+        "discount": 0.2
+    },
+    {
+        "id": "9f1d9c885bb54c8ee8c2f9eb",
+        "name": "Shirt",
+        "description": "New Bike model with 46 GB RAM, 896 GB storage, and early features",
+        "netPrice": 507.78,
+        "weight": 152,
+        "discount": 0.24
+    },
+    {
+        "id": "af5ad61ecfc18ec16bcdaa6d",
+        "name": "Soap",
+        "description": "The Clarenzio Shoes is the latest in a series of infamous products from Riolo-Cremona e figli",
+        "netPrice": 289.05,
+        "weight": 474,
+        "discount": 0.72
+    },
+    {
+        "id": "bc0a34214d969c3b5f4b7af6",
+        "name": "Towels",
+        "description": "Discover the snake-like agility of our Computer, perfect for every users",
+        "netPrice": 521.1,
+        "weight": 557,
+        "discount": 0.68
+    },
+    {
+        "id": "238bd69cfb4d15acebdfc59f",
+        "name": "Pizza",
+        "description": "Recycled Keyboard designed with Wooden for tense performance",
+        "netPrice": 997.15,
+        "weight": 1825,
+        "discount": 0.08
+    },
+    {
+        "id": "1bc5ca9dad9daffbfdfd1fca",
+        "name": "Computer",
+        "description": "Our rhinoceros-friendly Mouse ensures nimble comfort for your pets",
+        "netPrice": 861.89,
+        "weight": 1417,
+        "discount": 0.5
+    },
+    {
+        "id": "ced693bde8ae2bd8f9c4d0eb",
+        "name": "Salad",
+        "description": "Discover the insignificant new Sausages with an exciting mix of Plastic ingredients",
+        "netPrice": 159.85,
+        "weight": 1199,
+        "discount": 0.25
+    },
+    {
+        "id": "37bddfc8cc2af4e5f6641cf1",
+        "name": "Pizza",
+        "description": "New teal Soap with ergonomic design for striking comfort",
+        "netPrice": 81.99,
+        "weight": 1537,
+        "discount": 0.67
+    },
+    {
+        "id": "b9aaf038ba11f7d24eeff4ff",
+        "name": "Ball",
+        "description": "Introducing the Panama-inspired Hat, blending deserted style with local craftsmanship",
+        "netPrice": 412.59,
+        "weight": 966,
+        "discount": 0.53
+    },
+    {
+        "id": "fcef0d629ff7a3cf9a7e5dc6",
+        "name": "Sausages",
+        "description": "Discover the acclaimed new Mouse with an exciting mix of Cotton ingredients",
+        "netPrice": 992.89,
+        "weight": 1205,
+        "discount": 0.6
+    },
+    {
+        "id": "a34b8dc5a0a2ffbd2daa33d1",
+        "name": "Cheese",
+        "description": "Violante SPA's most advanced Chicken technology increases low capabilities",
+        "netPrice": 785.99,
+        "weight": 1085,
+        "discount": 0.62
+    },
+    {
+        "id": "fc920b7a13c9fa105dd1dd0a",
+        "name": "Pizza",
+        "description": "Savor the tender essence in our Chair, designed for talkative culinary adventures",
+        "netPrice": 24.39,
+        "weight": 1115,
+        "discount": 0.16
+    },
+    {
+        "id": "0c17dc7fac31f4bfcafc7edf",
+        "name": "Pizza",
+        "description": "The sleek and perfumed Bacon comes with purple LED lighting for smart functionality",
+        "netPrice": 289.05,
+        "weight": 1609,
+        "discount": 0.48
+    },
+    {
+        "id": "78f59fb99e7326a0c8cbaaed",
+        "name": "Gloves",
+        "description": "Professional-grade Gloves perfect for considerate training and recreational use",
+        "netPrice": 343.05,
+        "weight": 1845,
+        "discount": 0.46
+    },
+    {
+        "id": "a5db54ddc83dbffe65f7bb5a",
+        "name": "Shoes",
+        "description": "Our polar bear-friendly Ball ensures selfish comfort for your pets",
+        "netPrice": 495.69,
+        "weight": 504,
+        "discount": 0.77
+    },
+    {
+        "id": "daf423287932bfbc415a6dfa",
+        "name": "Ball",
+        "description": "The responsiva multi-laterale Capacità Computer offers reliable performance and responsible design",
+        "netPrice": 345.35,
+        "weight": 299,
+        "discount": 0.81
+    },
+    {
+        "id": "ccc4cb9eff2b63bbc2f1dfdf",
+        "name": "Gloves",
+        "description": "Professional-grade Keyboard perfect for unwelcome training and recreational use",
+        "netPrice": 606.25,
+        "weight": 644,
+        "discount": 0.71
+    },
+    {
+        "id": "6dc3dc291daced7b35edc4cb",
+        "name": "Sausages",
+        "description": "The sleek and insistent Pants comes with silver LED lighting for smart functionality",
+        "netPrice": 231.39,
+        "weight": 599,
+        "discount": 0.54
+    },
+    {
+        "id": "bbe82da4741a520f7aff28e2",
+        "name": "Salad",
+        "description": "New Mouse model with 73 GB RAM, 357 GB storage, and improbable features",
+        "netPrice": 135.49,
+        "weight": 347,
+        "discount": 0.33
+    },
+    {
+        "id": "5dedf95f89ecd42ebb7dcc3b",
+        "name": "Bike",
+        "description": "Schiavo, Costantino e Damico e figli's most advanced Sausages technology increases hidden capabilities",
+        "netPrice": 101.59,
+        "weight": 1447,
+        "discount": 0.55
+    },
+    {
+        "id": "3bb3af0f00fa7e072a1e3aec",
+        "name": "Chicken",
+        "description": "Introducing the Haiti-inspired Chicken, blending posh style with local craftsmanship",
+        "netPrice": 584.5,
+        "weight": 354,
+        "discount": 0.8
+    },
+    {
+        "id": "c186d7bcceee3ac9b877173f",
+        "name": "Pants",
+        "description": "New Cheese model with 79 GB RAM, 960 GB storage, and boiling features",
+        "netPrice": 90.41,
+        "weight": 557,
+        "discount": 0.96
+    },
+    {
+        "id": "d614383a6b5ab5de26facdd5",
+        "name": "Chips",
+        "description": "New Pants model with 66 GB RAM, 310 GB storage, and tough features",
+        "netPrice": 614.25,
+        "weight": 831,
+        "discount": 0.15
+    },
+    {
+        "id": "e4eec5ce7aa9e81b8e44c16e",
+        "name": "Mouse",
+        "description": "Innovative Sausages featuring unaware technology and Bamboo construction",
+        "netPrice": 856.79,
+        "weight": 709,
+        "discount": 0.9
+    },
+    {
+        "id": "c0b893ec77b1046d1fdfde7f",
+        "name": "Computer",
+        "description": "Discover the next new Computer with an exciting mix of Bronze ingredients",
+        "netPrice": 153.19,
+        "weight": 1766,
+        "discount": 0.17
+    },
+    {
+        "id": "4fc1bf73dcbd9bda368c014f",
+        "name": "Soap",
+        "description": "The magenta Towels combines Georgia aesthetics with Thulium-based durability",
+        "netPrice": 471.85,
+        "weight": 408,
+        "discount": 0.72
+    },
+    {
+        "id": "08d3dedcc7c8dd9c4a372a8e",
+        "name": "Tuna",
+        "description": "The Onofrio Pants is the latest in a series of agile products from Acquistapace, Foglia e Palmeri SPA",
+        "netPrice": 985.25,
+        "weight": 906,
+        "discount": 0.99
+    },
+    {
+        "id": "aabbb0dc5bf85564aeccbbfc",
+        "name": "Table",
+        "description": "Rustic Bacon designed with Gold for trustworthy performance",
+        "netPrice": 67.79,
+        "weight": 617,
+        "discount": 0.89
+    },
+    {
+        "id": "13de3bed6e067ffb5976d1b6",
+        "name": "Tuna",
+        "description": "The Telemaco Ball is the latest in a series of questionable products from Babini-Monticelli e figli",
+        "netPrice": 436.89,
+        "weight": 1984,
+        "discount": 0.89
+    },
+    {
+        "id": "afde7b5bf4c54ec076aedeaa",
+        "name": "Chips",
+        "description": "Our lion-friendly Gloves ensures functional comfort for your pets",
+        "netPrice": 109.19,
+        "weight": 537,
+        "discount": 0.8
+    },
+    {
+        "id": "3fdcdcd5beb4f3acbac6aa5a",
+        "name": "Table",
+        "description": "Stylish Mouse designed to make you stand out with gaseous looks",
+        "netPrice": 564.7,
+        "weight": 1739,
+        "discount": 0.76
+    },
+    {
+        "id": "5a7bd8f8b3a8d2c9ddc1c8a9",
+        "name": "Bacon",
+        "description": "The Noè Chips is the latest in a series of delicious products from Litterio, Ferluga e Lombardini Group",
+        "netPrice": 369.99,
+        "weight": 1675,
+        "discount": 0.73
+    },
+    {
+        "id": "743fda4be67aac1cedb4cad8",
+        "name": "Table",
+        "description": "De Carlo, Simone e Pizzi s.r.l.'s most advanced Computer technology increases infamous capabilities",
+        "netPrice": 62.69,
+        "weight": 1142,
+        "discount": 0.09
+    },
+    {
+        "id": "bc8d0f5dab842bb7cc4c9aca",
+        "name": "Car",
+        "description": "New Salad model with 88 GB RAM, 94 GB storage, and ugly features",
+        "netPrice": 393.18,
+        "weight": 1415,
+        "discount": 0.98
+    },
+    {
+        "id": "15944ccfa7a263e60b331d70",
+        "name": "Table",
+        "description": "Innovative Computer featuring nocturnal technology and Aluminum construction",
+        "netPrice": 479.35,
+        "weight": 1315,
+        "discount": 0.33
+    },
+    {
+        "id": "bdd73f949be60bec60a9a8ce",
+        "name": "Towels",
+        "description": "The sleek and regal Sausages comes with silver LED lighting for smart functionality",
+        "netPrice": 710.45,
+        "weight": 793,
+        "discount": 0.7
+    },
+    {
+        "id": "4bb6479cff0feabbdbd5fa1d",
+        "name": "Hat",
+        "description": "Petrella SPA's most advanced Bike technology increases elderly capabilities",
+        "netPrice": 796.59,
+        "weight": 1172,
+        "discount": 0.12
+    },
+    {
+        "id": "cabe0b2d1aceff2aa4afe5a6",
+        "name": "Shirt",
+        "description": "Our flamingo-friendly Chicken ensures favorite comfort for your pets",
+        "netPrice": 667.1,
+        "weight": 1610,
+        "discount": 0.17
+    },
+    {
+        "id": "fdba2588f13c0ecccb1a56de",
+        "name": "Gloves",
+        "description": "Our bitter-inspired Ball brings a taste of luxury to your aggravating lifestyle",
+        "netPrice": 492.09,
+        "weight": 1292,
+        "discount": 0.31
+    },
+    {
+        "id": "e8cdd5e94f51784bbe38dc17",
+        "name": "Computer",
+        "description": "The full-range compatibile Protocollo Shoes offers reliable performance and inexperienced design",
+        "netPrice": 11.49,
+        "weight": 1377,
+        "discount": 0.11
+    },
+    {
+        "id": "b066e8dafc2bfcf6deef1ec6",
+        "name": "Hat",
+        "description": "New Computer model with 74 GB RAM, 776 GB storage, and inconsequential features",
+        "netPrice": 916.7,
+        "weight": 141,
+        "discount": 0.6
+    },
+    {
+        "id": "85c2851647ff8750a962ac37",
+        "name": "Shoes",
+        "description": "Unbranded Pants designed with Gold for punctual performance",
+        "netPrice": 17.65,
+        "weight": 1523,
+        "discount": 0.23
+    },
+    {
+        "id": "c5ef65dada40a4f4a4bfee6f",
+        "name": "Hat",
+        "description": "Introducing the Isole Cayman-inspired Sausages, blending nutritious style with local craftsmanship",
+        "netPrice": 724.49,
+        "weight": 896,
+        "discount": 0.92
+    },
+    {
+        "id": "b249513d92c7732603dde1ed",
+        "name": "Sausages",
+        "description": "Savor the moist essence in our Sausages, designed for downright culinary adventures",
+        "netPrice": 420,
+        "weight": 1589,
+        "discount": 0.42
+    },
+    {
+        "id": "e6dac1b5dd2696ac676152eb",
+        "name": "Salad",
+        "description": "The Lisa Gloves is the latest in a series of silver products from Marcello-Giunta e figli",
+        "netPrice": 768.37,
+        "weight": 1731,
+        "discount": 0.28
+    },
+    {
+        "id": "f03929bddff8adcd7feed7ca",
+        "name": "Mouse",
+        "description": "The asincrona condivisibile Strategia Chair offers reliable performance and colorless design",
+        "netPrice": 482.79,
+        "weight": 768,
+        "discount": 0.07
+    },
+    {
+        "id": "6ae6daccdd43fad168556200",
+        "name": "Mouse",
+        "description": "Featuring Bromine-enhanced technology, our Shirt offers unparalleled portly performance",
+        "netPrice": 830.49,
+        "weight": 1591,
+        "discount": 0.36
+    },
+    {
+        "id": "bcbe6dfdcc9dae8edcbdde8a",
+        "name": "Soap",
+        "description": "Our peacock-friendly Keyboard ensures light comfort for your pets",
+        "netPrice": 46.39,
+        "weight": 1288,
+        "discount": 0.92
+    },
+    {
+        "id": "0ffde9b6bbf08eddc74d4513",
+        "name": "Hat",
+        "description": "Discover the immense new Computer with an exciting mix of Gold ingredients",
+        "netPrice": 393.49,
+        "weight": 263,
+        "discount": 0.61
+    },
+    {
+        "id": "b99b81b2e87f2729c8be77f1",
+        "name": "Computer",
+        "description": "Savor the golden essence in our Hat, designed for jittery culinary adventures",
+        "netPrice": 564.75,
+        "weight": 450,
+        "discount": 0.95
+    },
+    {
+        "id": "ffe9ecd72a6a571678238e06",
+        "name": "Shoes",
+        "description": "New salmon Shoes with ergonomic design for watery comfort",
+        "netPrice": 682.69,
+        "weight": 1767,
+        "discount": 0.18
+    },
+    {
+        "id": "f4eddecacaead1c21cee1bcd",
+        "name": "Pants",
+        "description": "Our sweet-inspired Gloves brings a taste of luxury to your pleasant lifestyle",
+        "netPrice": 909.49,
+        "weight": 1553,
+        "discount": 0.3
+    },
+    {
+        "id": "54f7eae2caea4cfcccc43db1",
+        "name": "Ball",
+        "description": "Our salty-inspired Shirt brings a taste of luxury to your noted lifestyle",
+        "netPrice": 770.19,
+        "weight": 1524,
+        "discount": 0.94
+    },
+    {
+        "id": "dcdee9cc43bac1ddb7dcf16f",
+        "name": "Sausages",
+        "description": "New turquoise Gloves with ergonomic design for linear comfort",
+        "netPrice": 198.5,
+        "weight": 1531,
+        "discount": 0.12
+    },
+    {
+        "id": "1d97afa74ffa9b9ac6df115b",
+        "name": "Gloves",
+        "description": "Pierini-Di Battista SPA's most advanced Shirt technology increases crushing capabilities",
+        "netPrice": 431.85,
+        "weight": 1380,
+        "discount": 0.75
+    },
+    {
+        "id": "addcf30dede22ca1dd3f557e",
+        "name": "Gloves",
+        "description": "Featuring Fermium-enhanced technology, our Chicken offers unparalleled scented performance",
+        "netPrice": 441.95,
+        "weight": 944,
+        "discount": 1
+    },
+    {
+        "id": "06d72ed8af9e7cb66a81e3fd",
+        "name": "Shoes",
+        "description": "Experience the mint green brilliance of our Table, perfect for jumbo environments",
+        "netPrice": 849.79,
+        "weight": 677,
+        "discount": 0.21
+    },
+    {
+        "id": "e1c46f894cdc6feeee3a6066",
+        "name": "Salad",
+        "description": "Featuring Tennessine-enhanced technology, our Salad offers unparalleled supportive performance",
+        "netPrice": 575.49,
+        "weight": 1482,
+        "discount": 0.64
+    },
+    {
+        "id": "59eb30ee52df4fa7baabf1ba",
+        "name": "Bike",
+        "description": "The violet Bacon combines Isole Marshall aesthetics with Promethium-based durability",
+        "netPrice": 718.99,
+        "weight": 1876,
+        "discount": 0.3
+    },
+    {
+        "id": "ea3f855fdfadde19a6ccdc9f",
+        "name": "Shoes",
+        "description": "The fuchsia Pants combines Niue aesthetics with Rhenium-based durability",
+        "netPrice": 245.39,
+        "weight": 241,
+        "discount": 0.45
+    },
+    {
+        "id": "8441efde39436acaffdc1d74",
+        "name": "Chicken",
+        "description": "Featuring Berkelium-enhanced technology, our Soap offers unparalleled hollow performance",
+        "netPrice": 451.19,
+        "weight": 459,
+        "discount": 0.29
+    },
+    {
+        "id": "d59ca56b5c5f10f64e7fc4d0",
+        "name": "Computer",
+        "description": "Our bear-friendly Shoes ensures nutritious comfort for your pets",
+        "netPrice": 349.4,
+        "weight": 1577,
+        "discount": 0.9
+    },
+    {
+        "id": "eed3dec6175b3cbce0fbb41d",
+        "name": "Sausages",
+        "description": "The pink Bacon combines Isole di Turks and Caicos aesthetics with Silicon-based durability",
+        "netPrice": 272.89,
+        "weight": 1802,
+        "discount": 0.81
+    },
+    {
+        "id": "42632bb7db4ef8af2ff346db",
+        "name": "Pizza",
+        "description": "New olive Fish with ergonomic design for distant comfort",
+        "netPrice": 646.19,
+        "weight": 1668,
+        "discount": 0.19
+    },
+    {
+        "id": "66731a711c244e359170a2db",
+        "name": "Shoes",
+        "description": "Discover the flawed new Tuna with an exciting mix of Rubber ingredients",
+        "netPrice": 303.99,
+        "weight": 897,
+        "discount": 0.66
+    },
+    {
+        "id": "1ac8affff3e847d40ebf75da",
+        "name": "Soap",
+        "description": "Our polar bear-friendly Sausages ensures queasy comfort for your pets",
+        "netPrice": 482.25,
+        "weight": 376,
+        "discount": 0.28
+    },
+    {
+        "id": "1fde4ef66dfffa611c6a3339",
+        "name": "Table",
+        "description": "Ergonomic Car made with Granite for all-day gorgeous support",
+        "netPrice": 38.2,
+        "weight": 1327,
+        "discount": 0.11
+    },
+    {
+        "id": "a0d011cea262aa1e2aaff969",
+        "name": "Pants",
+        "description": "The Tarcisio Bike is the latest in a series of shabby products from Como Group",
+        "netPrice": 733.95,
+        "weight": 1929,
+        "discount": 0.2
+    },
+    {
+        "id": "caa437df560e7fac5aa5847d",
+        "name": "Computer",
+        "description": "Gorgeous Fish designed with Bronze for dirty performance",
+        "netPrice": 295.19,
+        "weight": 156,
+        "discount": 0.82
+    },
+    {
+        "id": "a0ffc6c843e1e33b99a323da",
+        "name": "Computer",
+        "description": "Experience the mint green brilliance of our Sausages, perfect for weighty environments",
+        "netPrice": 118.99,
+        "weight": 1229,
+        "discount": 0.94
+    },
+    {
+        "id": "95ae5a8dd6e7bf0fd00acfca",
+        "name": "Cheese",
+        "description": "Small Car designed with Marble for ornery performance",
+        "netPrice": 758.09,
+        "weight": 1654,
+        "discount": 0.76
+    },
+    {
+        "id": "3e4baf64e9aac6cf3fc5abf8",
+        "name": "Towels",
+        "description": "The basata sul contenuto inversa Sito web Fish offers reliable performance and incomplete design",
+        "netPrice": 146.85,
+        "weight": 1602,
+        "discount": 0.24
+    },
+    {
+        "id": "12caedce58f78edce109beee",
+        "name": "Pizza",
+        "description": "Licensed Table designed with Plastic for helpless performance",
+        "netPrice": 431.59,
+        "weight": 1982,
+        "discount": 0.52
+    },
+    {
+        "id": "6ca24ba22e0dceccfd11364a",
+        "name": "Sausages",
+        "description": "The salmon Chips combines Belize aesthetics with Magnesium-based durability",
+        "netPrice": 709.29,
+        "weight": 840,
+        "discount": 0.87
+    },
+    {
+        "id": "bfa02ec5fad8739c720dbb0c",
+        "name": "Ball",
+        "description": "The teal Gloves combines Montserrat aesthetics with Sodium-based durability",
+        "netPrice": 717.49,
+        "weight": 1513,
+        "discount": 0.56
+    },
+    {
+        "id": "da6babcbaf96bbd0aff7adb9",
+        "name": "Shoes",
+        "description": "New mint green Hat with ergonomic design for boiling comfort",
+        "netPrice": 998.55,
+        "weight": 1764,
+        "discount": 0.34
+    },
+    {
+        "id": "8a58ba49bd206abdf6c2a451",
+        "name": "Bacon",
+        "description": "The Cesare Towels is the latest in a series of amazing products from Sardella, Villari e Lo Iacono s.r.l.",
+        "netPrice": 39.49,
+        "weight": 553,
+        "discount": 0.99
+    },
+    {
+        "id": "1285f0d6317daaeed8bfbccf",
+        "name": "Mouse",
+        "description": "Discover the hamster-like agility of our Mouse, perfect for each users",
+        "netPrice": 581.95,
+        "weight": 942,
+        "discount": 0.93
+    },
+    {
+        "id": "f8b5b5adcf33ed800d1d3f6b",
+        "name": "Chicken",
+        "description": "Frozen Pants designed with Rubber for salty performance",
+        "netPrice": 58.65,
+        "weight": 117,
+        "discount": 0.83
+    },
+    {
+        "id": "4462aff1efbf1f4c05bc20b7",
+        "name": "Keyboard",
+        "description": "New Computer model with 78 GB RAM, 946 GB storage, and mammoth features",
+        "netPrice": 388.69,
+        "weight": 988,
+        "discount": 0.05
+    },
+    {
+        "id": "5c4eb40ace4ccc4d5ce8a74d",
+        "name": "Car",
+        "description": "New orange Computer with ergonomic design for superior comfort",
+        "netPrice": 222.29,
+        "weight": 1937,
+        "discount": 0.99
+    },
+    {
+        "id": "e9544b3fe9bff0a3dd1f4ed5",
+        "name": "Sausages",
+        "description": "Saporito, Corridori e Bionaz s.r.l.'s most advanced Chair technology increases cooperative capabilities",
+        "netPrice": 208.89,
+        "weight": 489,
+        "discount": 0.61
+    },
+    {
+        "id": "cc7009ab065ac4a24c81216b",
+        "name": "Table",
+        "description": "Discover the impartial new Car with an exciting mix of Gold ingredients",
+        "netPrice": 759.78,
+        "weight": 171,
+        "discount": 0.69
+    },
+    {
+        "id": "c4a960b8f286ee57dc0c58aa",
+        "name": "Tuna",
+        "description": "The coesiva fondamentale Sovrastruttura Sausages offers reliable performance and dazzling design",
+        "netPrice": 265.39,
+        "weight": 1678,
+        "discount": 0.72
+    },
+    {
+        "id": "e1abcba948a3d3bfb72cbcf7",
+        "name": "Car",
+        "description": "New Bike model with 27 GB RAM, 436 GB storage, and frugal features",
+        "netPrice": 298.85,
+        "weight": 1288,
+        "discount": 0.13
+    },
+    {
+        "id": "bac18c8cb7eaeebd7aee3f76",
+        "name": "Shoes",
+        "description": "Discover the tiger-like agility of our Chair, perfect for violent users",
+        "netPrice": 887.45,
+        "weight": 1073,
+        "discount": 0.32
+    },
+    {
+        "id": "aeb1d9a1cdf33fca0004fc80",
+        "name": "Bike",
+        "description": "Stylish Fish designed to make you stand out with zany looks",
+        "netPrice": 593.19,
+        "weight": 916,
+        "discount": 0.1
+    },
+    {
+        "id": "7e2ea468eea8f78ab6cd7acb",
+        "name": "Table",
+        "description": "Our tangy-inspired Shoes brings a taste of luxury to your hospitable lifestyle",
+        "netPrice": 212.7,
+        "weight": 1555,
+        "discount": 0.44
+    },
+    {
+        "id": "d5883af27df9bd688eb0789b",
+        "name": "Soap",
+        "description": "Professional-grade Salad perfect for slushy training and recreational use",
+        "netPrice": 202.59,
+        "weight": 211,
+        "discount": 0.52
+    },
+    {
+        "id": "b3cee1aa8a02f01d4fae1973",
+        "name": "Ball",
+        "description": "Professional-grade Pizza perfect for shabby training and recreational use",
+        "netPrice": 162.99,
+        "weight": 1891,
+        "discount": 0.66
+    },
+    {
+        "id": "08e8b0b7f0faf2a5f1bd4775",
+        "name": "Salad",
+        "description": "The sleek and worldly Bike comes with yellow LED lighting for smart functionality",
+        "netPrice": 798.35,
+        "weight": 1411,
+        "discount": 0.07
+    },
+    {
+        "id": "36f6b2a4cf6efbc0ac66e1c0",
+        "name": "Gloves",
+        "description": "The Ofelia Car is the latest in a series of primary products from Megna, Brogi e Restivo SPA",
+        "netPrice": 906.35,
+        "weight": 1985,
+        "discount": 0.21
+    },
+    {
+        "id": "d7a194ecc9ad6ea8fcd3e362",
+        "name": "Pants",
+        "description": "Featuring Nihonium-enhanced technology, our Pizza offers unparalleled international performance",
+        "netPrice": 588.69,
+        "weight": 250,
+        "discount": 0.98
+    },
+    {
+        "id": "02b42e37d5d61f674fe56c98",
+        "name": "Computer",
+        "description": "Stylish Pizza designed to make you stand out with grouchy looks",
+        "netPrice": 917.59,
+        "weight": 298,
+        "discount": 0.53
+    },
+    {
+        "id": "45fdbddcc04c7cc0a15bdae5",
+        "name": "Sausages",
+        "description": "Greco-Iaria Group's most advanced Tuna technology increases upset capabilities",
+        "netPrice": 650.29,
+        "weight": 1384,
+        "discount": 0.51
+    },
+    {
+        "id": "d145b9a9dfae816ca70a9850",
+        "name": "Cheese",
+        "description": "The nazionale monitorata Supporto Pizza offers reliable performance and pretty design",
+        "netPrice": 69.99,
+        "weight": 76,
+        "discount": 0.76
+    },
+    {
+        "id": "35a51a0def43fcebbde79844",
+        "name": "Pants",
+        "description": "The regionale obbligatoria Middleware Salad offers reliable performance and triangular design",
+        "netPrice": 681.09,
+        "weight": 1730,
+        "discount": 0.37
+    },
+    {
+        "id": "cacdcce0dd59b2af918a658e",
+        "name": "Keyboard",
+        "description": "Stylish Towels designed to make you stand out with fortunate looks",
+        "netPrice": 397.39,
+        "weight": 1193,
+        "discount": 0.3
+    },
+    {
+        "id": "ede8607c7e1de3932cf7cbf7",
+        "name": "Pants",
+        "description": "Our fox-friendly Shoes ensures antique comfort for your pets",
+        "netPrice": 441.11,
+        "weight": 687,
+        "discount": 0.81
+    },
+    {
+        "id": "ed5e22aaca9d598f00decbb7",
+        "name": "Shirt",
+        "description": "Our fresh-inspired Car brings a taste of luxury to your odd lifestyle",
+        "netPrice": 20.35,
+        "weight": 535,
+        "discount": 0.49
+    },
+    {
+        "id": "ca9dabdd60193e1ea8edfa14",
+        "name": "Ball",
+        "description": "Featuring Bismuth-enhanced technology, our Sausages offers unparalleled pertinent performance",
+        "netPrice": 156.65,
+        "weight": 528,
+        "discount": 0.41
+    },
+    {
+        "id": "d458b326a3fcdfaa94089cc1",
+        "name": "Cheese",
+        "description": "Our moist-inspired Shoes brings a taste of luxury to your ultimate lifestyle",
+        "netPrice": 650.79,
+        "weight": 640,
+        "discount": 0.23
+    },
+    {
+        "id": "6faea580a620cb0c8ed84da6",
+        "name": "Towels",
+        "description": "Savor the crispy essence in our Hat, designed for alienated culinary adventures",
+        "netPrice": 271.79,
+        "weight": 1368,
+        "discount": 0.7
+    },
+    {
+        "id": "0f42dbc4a8e846cc3abec025",
+        "name": "Fish",
+        "description": "New cyan Table with ergonomic design for sentimental comfort",
+        "netPrice": 918.29,
+        "weight": 1918,
+        "discount": 0.03
+    },
+    {
+        "id": "205fbba216d9694fad85efd4",
+        "name": "Chips",
+        "description": "Featuring Protactinium-enhanced technology, our Chair offers unparalleled careless performance",
+        "netPrice": 420.29,
+        "weight": 1572,
+        "discount": 0.03
+    },
+    {
+        "id": "5a6fb93d6a4ef8d5c686e82e",
+        "name": "Fish",
+        "description": "The Donatello Mouse is the latest in a series of sparse products from Cantagallo, Musumeci e Calì s.r.l.",
+        "netPrice": 483.29,
+        "weight": 250,
+        "discount": 0
+    },
+    {
+        "id": "9dbfbbb8e1b881d5528e24da",
+        "name": "Shoes",
+        "description": "Stylish Shirt designed to make you stand out with suburban looks",
+        "netPrice": 971.85,
+        "weight": 278,
+        "discount": 0.41
+    },
+    {
+        "id": "36f5cb52aa6ceedc3a0da6f4",
+        "name": "Chicken",
+        "description": "Ergonomic Chair made with Cotton for all-day ragged support",
+        "netPrice": 444.95,
+        "weight": 538,
+        "discount": 0.28
+    },
+    {
+        "id": "ce5ac16ebc96dbd25a27ff6f",
+        "name": "Shoes",
+        "description": "Discover the elephant-like agility of our Keyboard, perfect for faint users",
+        "netPrice": 335.39,
+        "weight": 98,
+        "discount": 0.97
+    },
+    {
+        "id": "641877dab9b98dd438fd613f",
+        "name": "Soap",
+        "description": "The sleek and squiggly Shirt comes with grey LED lighting for smart functionality",
+        "netPrice": 332.29,
+        "weight": 1532,
+        "discount": 0.97
+    },
+    {
+        "id": "d2deda416151afeace8f856f",
+        "name": "Chips",
+        "description": "The Appia Hat is the latest in a series of nippy products from Narciso SPA",
+        "netPrice": 539.79,
+        "weight": 1434,
+        "discount": 0.19
+    },
+    {
+        "id": "b887bd31aa4f31caf7866ccb",
+        "name": "Cheese",
+        "description": "The composita obbligatoria Iniziativa Salad offers reliable performance and writhing design",
+        "netPrice": 220.29,
+        "weight": 156,
+        "discount": 0.54
+    },
+    {
+        "id": "e6d8c96ddb0acae66d2e66b9",
+        "name": "Chips",
+        "description": "Di Dio e figli's most advanced Table technology increases productive capabilities",
+        "netPrice": 297.29,
+        "weight": 1261,
+        "discount": 0.4
+    },
+    {
+        "id": "c1ed8ee2faa6bdb8f2f41e82",
+        "name": "Chicken",
+        "description": "Our delicious-inspired Shoes brings a taste of luxury to your monumental lifestyle",
+        "netPrice": 516.15,
+        "weight": 200,
+        "discount": 0.05
+    },
+    {
+        "id": "542aaa9efcd6db0df1ff6e49",
+        "name": "Chips",
+        "description": "The Plinio Soap is the latest in a series of insecure products from Campoli, Piazza e Mingarelli SPA",
+        "netPrice": 53.15,
+        "weight": 639,
+        "discount": 0.65
+    },
+    {
+        "id": "53a10a4aecc0a48290704af1",
+        "name": "Fish",
+        "description": "Bespoke Table designed with Rubber for squiggly performance",
+        "netPrice": 233.99,
+        "weight": 603,
+        "discount": 0.06
+    },
+    {
+        "id": "66a373226e5990ccc0f108e4",
+        "name": "Fish",
+        "description": "Savor the smoky essence in our Salad, designed for hot culinary adventures",
+        "netPrice": 984.95,
+        "weight": 1875,
+        "discount": 0.57
+    },
+    {
+        "id": "51540b3ccccf1cf5e2948c34",
+        "name": "Table",
+        "description": "Introducing the Antille Olandesi-inspired Ball, blending darling style with local craftsmanship",
+        "netPrice": 382.65,
+        "weight": 1458,
+        "discount": 0.59
+    },
+    {
+        "id": "ee9fecfb08eec52bcbebc5ca",
+        "name": "Shirt",
+        "description": "Handcrafted Chair designed with Metal for diligent performance",
+        "netPrice": 674.85,
+        "weight": 891,
+        "discount": 0.03
+    },
+    {
+        "id": "9aa2bdc94a2344a475dafb4a",
+        "name": "Bike",
+        "description": "Stylish Chair designed to make you stand out with skeletal looks",
+        "netPrice": 930.35,
+        "weight": 1445,
+        "discount": 0.71
+    },
+    {
+        "id": "d194f1b7eeffe7cecf82b8e7",
+        "name": "Pizza",
+        "description": "Putzolu, Lattanzi e Campana SPA's most advanced Chips technology increases internal capabilities",
+        "netPrice": 291.58,
+        "weight": 1568,
+        "discount": 0.22
+    },
+    {
+        "id": "eadc0edab4e878ed4c282ce0",
+        "name": "Bacon",
+        "description": "The sleek and careless Chips comes with green LED lighting for smart functionality",
+        "netPrice": 112.09,
+        "weight": 455,
+        "discount": 0.7
+    },
+    {
+        "id": "322cbfc4cbb09cc9f15f5c35",
+        "name": "Sausages",
+        "description": "Discover the perfumed new Cheese with an exciting mix of Rubber ingredients",
+        "netPrice": 947.29,
+        "weight": 834,
+        "discount": 0.46
+    },
+    {
+        "id": "bbf1f28e0d739daa4a8c6274",
+        "name": "Mouse",
+        "description": "Awesome Fish designed with Bronze for sparkling performance",
+        "netPrice": 635.75,
+        "weight": 1436,
+        "discount": 0.68
+    },
+    {
+        "id": "ce6291b6c8aedabceadf81ea",
+        "name": "Computer",
+        "description": "New sky blue Chair with ergonomic design for definite comfort",
+        "netPrice": 875.59,
+        "weight": 328,
+        "discount": 0.32
+    },
+    {
+        "id": "ebdfb4abe6cafd00fc4b5c2e",
+        "name": "Gloves",
+        "description": "Experience the salmon brilliance of our Chips, perfect for noteworthy environments",
+        "netPrice": 87.79,
+        "weight": 1823,
+        "discount": 0.16
+    },
+    {
+        "id": "ebbe94bcbab1822ae0fa732c",
+        "name": "Mouse",
+        "description": "The sleek and delectable Bacon comes with lavender LED lighting for smart functionality",
+        "netPrice": 914.79,
+        "weight": 1165,
+        "discount": 0.81
+    },
+    {
+        "id": "de49726f2bfe7eb64dafdfea",
+        "name": "Computer",
+        "description": "The grey Shoes combines Malesia aesthetics with Dubnium-based durability",
+        "netPrice": 22.35,
+        "weight": 231,
+        "discount": 0.91
+    },
+    {
+        "id": "95426fc6b4c1717c5aaccf7c",
+        "name": "Chair",
+        "description": "The teal Car combines Korea aesthetics with Gold-based durability",
+        "netPrice": 823.99,
+        "weight": 288,
+        "discount": 0.41
+    },
+    {
+        "id": "8e2dced1eae52f8ebbebebc1",
+        "name": "Keyboard",
+        "description": "Our butterfly-friendly Shirt ensures disloyal comfort for your pets",
+        "netPrice": 526.99,
+        "weight": 150,
+        "discount": 0.17
+    },
+    {
+        "id": "1b43c053389badeceb376e92",
+        "name": "Mouse",
+        "description": "Our dolphin-friendly Bike ensures antique comfort for your pets",
+        "netPrice": 573.49,
+        "weight": 839,
+        "discount": 0.7
+    },
+    {
+        "id": "0b9fc73b3800f3e8ccff908c",
+        "name": "Computer",
+        "description": "The dinamica sinergica Soluzione Fish offers reliable performance and blank design",
+        "netPrice": 742.39,
+        "weight": 1323,
+        "discount": 0.37
+    },
+    {
+        "id": "92fbeb8adf59a2b053ab95c7",
+        "name": "Cheese",
+        "description": "New Soap model with 77 GB RAM, 190 GB storage, and brisk features",
+        "netPrice": 147.29,
+        "weight": 770,
+        "discount": 0.93
+    },
+    {
+        "id": "0ab48fbeebd8a33c1e5d0358",
+        "name": "Cheese",
+        "description": "Professional-grade Hat perfect for straight training and recreational use",
+        "netPrice": 70.4,
+        "weight": 1028,
+        "discount": 0.36
+    },
+    {
+        "id": "d4ae4e0dab3f5239ca1b2edb",
+        "name": "Mouse",
+        "description": "Our sweet-inspired Ball brings a taste of luxury to your long lifestyle",
+        "netPrice": 428.65,
+        "weight": 1058,
+        "discount": 0.42
+    },
+    {
+        "id": "873ad20c74daf1c291d4cf9c",
+        "name": "Sausages",
+        "description": "The sleek and helpful Salad comes with turquoise LED lighting for smart functionality",
+        "netPrice": 636.45,
+        "weight": 1502,
+        "discount": 0.66
+    },
+    {
+        "id": "cefbde4bbbbfb27af148fafd",
+        "name": "Keyboard",
+        "description": "Innovative Pants featuring harmful technology and Concrete construction",
+        "netPrice": 372.02,
+        "weight": 166,
+        "discount": 0.07
+    },
+    {
+        "id": "7efd9b29b10e6a6ebf639db7",
+        "name": "Cheese",
+        "description": "Ciccarelli SPA's most advanced Pizza technology increases made-up capabilities",
+        "netPrice": 10.49,
+        "weight": 1193,
+        "discount": 0.63
+    },
+    {
+        "id": "4cefd5de9d0df9f3e87b4bd6",
+        "name": "Bike",
+        "description": "Featuring Palladium-enhanced technology, our Mouse offers unparalleled honored performance",
+        "netPrice": 738.74,
+        "weight": 1099,
+        "discount": 0.17
+    },
+    {
+        "id": "a1cfdaac480cdb02fd09dfbf",
+        "name": "Table",
+        "description": "New Chair model with 5 GB RAM, 359 GB storage, and well-off features",
+        "netPrice": 300.95,
+        "weight": 1164,
+        "discount": 0.59
+    },
+    {
+        "id": "bda55c8eb371cf80f59fcda9",
+        "name": "Ball",
+        "description": "Our rhinoceros-friendly Bike ensures yearly comfort for your pets",
+        "netPrice": 409.41,
+        "weight": 597,
+        "discount": 0.04
+    },
+    {
+        "id": "81f7d45e2621a787b7a4afcb",
+        "name": "Chair",
+        "description": "Luxurious Chips designed with Rubber for arid performance",
+        "netPrice": 853.15,
+        "weight": 1881,
+        "discount": 0.32
+    },
+    {
+        "id": "adfb3b86fe3d40c8a5ebe3d0",
+        "name": "Chips",
+        "description": "Discover the polar bear-like agility of our Towels, perfect for immaculate users",
+        "netPrice": 870.29,
+        "weight": 1405,
+        "discount": 0.96
+    },
+    {
+        "id": "5cb08ef1c5d6fc8bab18feab",
+        "name": "Pants",
+        "description": "The radicale robusta Conglomerato Soap offers reliable performance and turbulent design",
+        "netPrice": 917.99,
+        "weight": 843,
+        "discount": 0.76
+    },
+    {
+        "id": "13c39b274d1e5b895622ebec",
+        "name": "Salad",
+        "description": "Discover the natural new Shirt with an exciting mix of Bamboo ingredients",
+        "netPrice": 227.89,
+        "weight": 1791,
+        "discount": 0.26
+    },
+    {
+        "id": "fbdb4a6cdbcbbc981cfdd46b",
+        "name": "Car",
+        "description": "Our ostrich-friendly Soap ensures outlandish comfort for your pets",
+        "netPrice": 588.35,
+        "weight": 1821,
+        "discount": 0.8
+    },
+    {
+        "id": "3bdb5f0b2a8fcd8be5cbeed8",
+        "name": "Chair",
+        "description": "Savor the rich essence in our Pants, designed for vast culinary adventures",
+        "netPrice": 360.15,
+        "weight": 1609,
+        "discount": 0.31
+    },
+    {
+        "id": "4ec1fffcad2393f40578dfbf",
+        "name": "Pizza",
+        "description": "Featuring Astatine-enhanced technology, our Pizza offers unparalleled dearest performance",
+        "netPrice": 155.89,
+        "weight": 1570,
+        "discount": 0.18
+    },
+    {
+        "id": "d2f44628bce1a24cab10d37b",
+        "name": "Salad",
+        "description": "Stylish Ball designed to make you stand out with practical looks",
+        "netPrice": 304.92,
+        "weight": 1895,
+        "discount": 0.98
+    },
+    {
+        "id": "0b1a475ab0a0d8e6ab4faacf",
+        "name": "Gloves",
+        "description": "The dedicata estesa Successo Tuna offers reliable performance and cuddly design",
+        "netPrice": 900.59,
+        "weight": 1125,
+        "discount": 0.18
+    },
+    {
+        "id": "ae59f3d80fbe9e1a9bb417ee",
+        "name": "Chips",
+        "description": "The nextgeneration sicura Complessità Ball offers reliable performance and tender design",
+        "netPrice": 376.85,
+        "weight": 250,
+        "discount": 0.8
+    },
+    {
+        "id": "025325c929b593f1dabecd19",
+        "name": "Sausages",
+        "description": "Zani s.r.l.'s most advanced Tuna technology increases dim capabilities",
+        "netPrice": 352.55,
+        "weight": 1934,
+        "discount": 0.32
+    },
+    {
+        "id": "c2efcd66da8d1d252523aae6",
+        "name": "Mouse",
+        "description": "Professional-grade Chair perfect for svelte training and recreational use",
+        "netPrice": 588.79,
+        "weight": 1172,
+        "discount": 0.12
+    }
+]
