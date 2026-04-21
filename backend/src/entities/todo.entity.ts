@@ -1,10 +1,10 @@
-export interface TodoDocument {
+export interface Todo {
   id: string;
   title: string;
-  dueDate: Date;
+  dueDate?: Date | null;
   completed: boolean;
 }
 
-export interface Todo extends TodoDocument {
+export interface TodoExtended extends Todo {
   expired: boolean;
 }
