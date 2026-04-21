@@ -52,7 +52,7 @@
 
 ---
 
-## 21/04/2026 — Backend completato + API testate
+## 21/04/2026 — Backend completato + API testate + Script seed creato
 
 ### Funzioni implementate
 
@@ -115,18 +115,6 @@
   - Rimosso `_id` (sostituito da `id` generato dal virtual di Mongoose)
   - Rimosso `__v` (campo interno di versioning di Mongoose, non previsto dalla specifica)
 
-### Concetti appresi
-
-- **HTTP: una sola risposta per richiesta** — chiamare `res.send()` e poi `res.json()` sulla stessa risposta causa errore `Cannot set headers after they are sent to the client`. Anche concatenare `.send().json()` è sbagliato — `send()` chiude già la risposta
-- **Status code semantici**: `200` per operazioni riuscite, `201` per creazione risorsa, `404` per risorsa non trovata
-- **`_id` vs `id` in Mongoose**: MongoDB salva l'identificatore come `_id` (ObjectId). Mongoose espone automaticamente `id` come virtual stringa. Nel `transform` si elimina `_id` e si mantiene `id`
-- **`__v` in Mongoose**: campo di versioning interno usato da Mongoose per gestire conflitti su array annidati. Non va mai esposto nelle API
-- **`toJSON.transform`**: funzione `(doc, ret) => ret` che intercetta la serializzazione JSON del documento. `doc` è il documento Mongoose originale, `ret` è l'oggetto plain JS che verrà serializzato — si può modificare liberamente prima del return
-- **`populate()` in Mongoose** (concetto trasversale): risolve riferimenti `ObjectId` verso altri documenti. Richiede `ref: 'NomeCollection'` nello schema. Non utilizzato in questo progetto (nessuna relazione tra collection)
-- **`format: date` OpenAPI**: corrisponde allo standard ISO 8601 → formato `YYYY-MM-DD`
-- **MongoDB crea il database automaticamente**: non serve creare il DB manualmente, viene creato al primo documento inserito
-- **`mongoose.set('debug', true)`**: stampa in console ogni query eseguita da Mongoose — utile in sviluppo per verificare cosa viene realmente inviato a MongoDB
-
 ### Test API con Postman — risultati
 
 - ✅ `POST /api/todos` con `title` e `dueDate` → crea todo, `completed: false`, `expired` calcolato correttamente
@@ -137,8 +125,61 @@
 - ✅ `PATCH /api/todos/:id/uncheck` → imposta `completed: false`, risponde `200`
 - ✅ Response pulita: niente `_id`, niente `__v`
 
+### Gestione errori — decisione architetturale
+
+- Analizzati i tre scenari di errore su `findOne(id)`:
+  1. Id ben formato + documento esistente → ritorna il documento
+  2. Id ben formato + documento **non esistente** → ritorna `null` → gestito con `404` nel controller
+  3. Id **malformato** → Mongoose lancia `CastError` prima di interrogare il DB
+- **Express 5** gestisce automaticamente gli errori nelle route `async` — wrappa ogni handler in un `try/catch` interno e chiama `next(err)` automaticamente senza necessità di farlo manualmente (differenza chiave rispetto a Express 4)
+- Decisione presa: **non implementare error handler globale** — comportamento conforme al progetto fatto in classe, `CastError` restituisce `500` di default. Scelta motivata dalla conformità con il codice visto a lezione e dall'ambito d'esame (no overengineering)
+- Concetto appreso: error handler globale Express ha firma `(err, req, res, next)` — 4 parametri invece di 3, si registra in `app.ts` con `app.use()` dopo tutte le route
+
+### Script seed — `scripts/seed.ts`
+
+#### File creato
+
+- **`backend/scripts/seed.ts`** — script standalone per popolare il database con dati fake a scopo di sviluppo. Posizionato fuori da `src/` perché non fa parte del codice di produzione
+
+#### Dipendenza installata
+
+- **`@faker-js/faker`** installato come `devDependency` con `npm install @faker-js/faker --save-dev`
+- Motivo `--save-dev`: dipendenza necessaria solo in sviluppo, non in produzione. In `npm install --production` le `devDependencies` vengono ignorate
+- Locale utilizzato: `@faker-js/faker/locale/it` per generare dati in italiano
+
+#### Funzioni implementate
+
+- **`generateRandomTodo()`**
+  - `title`: generato con `faker.hacker.phrase()` / `faker.company.catchPhrase()` — testo in italiano (nota: `faker.lorem` genera sempre testo latino indipendentemente dal locale, non adatto per testi realistici)
+  - `dueDate`: generato con `faker.date.soon({ days: 150 })` con probabilità 50% — condizione `if (faker.datatype.boolean())` per rendere il campo opzionale, `undefined` altrimenti
+  - `completed`: generato con `faker.datatype.boolean({ probability: 0.3 })` — 30% di probabilità di essere `true`
+
+- **`generateTodos(num: number)`**
+  - Usa `Array.from({ length: num }, () => generateRandomTodo())` per generare array di N todo
+  - Attenzione: usare `{}` nel corpo della arrow function senza `return` esplicito ritorna `void` → usare parentesi tonde `()` per implicit return oppure `return` esplicito
+  - Chiama `TodoModel.create(data)` per inserimento bulk nel DB
+
+#### Flusso dello script
+
+1. Connessione a MongoDB con `mongoose.connect()`
+2. Pulizia collection con `TodoModel.deleteMany({})` — garantisce DB pulito ad ogni esecuzione
+3. Generazione e inserimento di 30 todo fake
+4. Log di conferma + `process.exit()` per terminare il processo Node
+
+#### Concetti appresi
+
+- **`devDependencies` vs `dependencies`**: le `devDependencies` non vengono installate in produzione — utile per tool, linter, faker, test runner
+- **`faker.lorem` e locale**: `lorem` genera sempre testo latino per design (è pseudo-testo segnaposto) — per testo realistico in italiano usare `faker.hacker`, `faker.company`, ecc.
+- **`faker.datatype.boolean()`**: genera booleano casuale — accetta `{ probability: number }` per controllare la distribuzione (es. `0.3` = 30% `true`)
+- **`faker.date.soon({ days, refDate })`**: genera una data nel futuro prossimo — `days` è il range, `refDate` è la data di riferimento in formato ISO 8601 (`YYYY-MM-DDThh:mm:ss.000Z` — attenzione all'ordine giorno/mese)
+- **Implicit return nelle arrow function**: `() => valore` ritorna implicitamente. `() => { valore }` senza `return` ritorna `void`
+- **`Array.from({ length: N }, fn)`**: pattern idiomatico JavaScript per generare array di N elementi tramite una funzione generatrice
+
+---
+
 ### Prossimo step
 
-- Gestione errori nel controller (try/catch con status code corretti)
-- Problema aperto: id non esistente o formato non valido restituisce `500` invece di `404` — Mongoose lancia eccezione su ObjectId malformato (`CastError`) che non viene intercettata
-- Dopo gestione errori → inizio **frontend Angular**
+- Inizio **frontend Angular**
+- Struttura componenti da definire: lista, item, modal
+- Setup proxy `/api` per development
+- Installazione e configurazione **ng-bootstrap**

@@ -6,7 +6,7 @@ import { QueryFilter } from "mongoose";
 
 export class TodoSrv {
   async find(filter: ShowCompletedTodoDto): Promise<Todo[]> {
-    const query: QueryFilter<Todo[]> = {};
+    const query: QueryFilter<Todo> = {};
 
     if (filter.showCompleted !== "true") query.completed = false;
 
