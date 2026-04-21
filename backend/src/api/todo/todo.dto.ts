@@ -1,4 +1,4 @@
-export interface ShowCompletedTodoDto {
+export interface ShowCompletedDto {
   showCompleted?: string;
 }
 

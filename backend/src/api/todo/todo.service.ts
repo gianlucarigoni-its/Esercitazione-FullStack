@@ -1,11 +1,11 @@
-import { ShowCompletedTodoDto, AddTodoDto } from "./todo.dto";
+import { ShowCompletedDto, AddTodoDto } from "./todo.dto";
 import { idParams } from "../../utils/id-params";
 import { TodoModel } from "./todo.module";
 import { Todo, TodoExtended } from "./../../entities/todo.entity";
 import { QueryFilter } from "mongoose";
 
 export class TodoSrv {
-  async find(filter: ShowCompletedTodoDto): Promise<Todo[]> {
+  async find(filter: ShowCompletedDto): Promise<Todo[]> {
     const query: QueryFilter<Todo> = {};
 
     if (filter.showCompleted !== "true") query.completed = false;

@@ -1,11 +1,11 @@
 import { TypedRequest } from "./../../utils/typed-request";
 import { Response } from "express";
-import { ShowCompletedTodoDto, AddTodoDto } from "./todo.dto";
+import { ShowCompletedDto, AddTodoDto } from "./todo.dto";
 import todoSrv from "./todo.service";
 import { idParams } from "../../utils/id-params";
 
 export async function getTodoList(
-  req: TypedRequest<any, ShowCompletedTodoDto>,
+  req: TypedRequest<any, ShowCompletedDto>,
   res: Response,
 ) {
   const result = await todoSrv.find(req.query);
