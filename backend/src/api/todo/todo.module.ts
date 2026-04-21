@@ -18,4 +18,13 @@ todoSchema.virtual("expired").get(function () {
   return false;
 });
 
+todoSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_, ret: any) => {
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  },
+});
+
 export const TodoModel = model("Todo", todoSchema);
