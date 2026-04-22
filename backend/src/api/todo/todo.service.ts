@@ -1,14 +1,14 @@
-import { ShowCompletedDto, AddTodoDto } from "./todo.dto";
-import { idParams } from "../../utils/id-params";
-import { TodoModel } from "./todo.module";
-import { Todo, TodoExtended } from "./../../entities/todo.entity";
-import { QueryFilter } from "mongoose";
+import { QueryFilter } from 'mongoose';
+import { IdParams } from '../../utils/id-params';
+import { Todo } from './../../entities/todo.entity';
+import { AddTodoDto, ShowCompletedDto } from './todo.dto';
+import { TodoModel } from './todo.module';
 
 export class TodoSrv {
   async find(filter: ShowCompletedDto): Promise<Todo[]> {
     const query: QueryFilter<Todo> = {};
 
-    if (filter.showCompleted !== "true") query.completed = false;
+    if (filter.showCompleted !== 'true') query.completed = false;
 
     const res = await TodoModel.find(query);
     return res;
@@ -20,7 +20,7 @@ export class TodoSrv {
     return res;
   }
 
-  async check(id: idParams): Promise<Todo | null> {
+  async check(id: IdParams): Promise<Todo | null> {
     const todo = await TodoModel.findOne({ _id: id.id });
     if (todo && todo.completed === false) {
       todo.completed = true;
@@ -29,7 +29,7 @@ export class TodoSrv {
     return null;
   }
 
-  async uncheck(id: idParams): Promise<Todo | null> {
+  async uncheck(id: IdParams): Promise<Todo | null> {
     const todo = await TodoModel.findOne({ _id: id.id });
     if (todo && todo.completed === true) {
       todo.completed = false;

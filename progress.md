@@ -177,6 +177,146 @@
 
 ---
 
+## 22/04/2026 — Gestione errori + Validazione input backend
+
+### Architettura gestione errori
+
+#### Struttura cartella `src/errors/`
+
+- **`not-found.error.ts`** — classe `NotFoundError extends Error` + `notFoundHandler`
+  - `NotFoundError`: errore custom lanciato dal controller quando `todoSrv.check()` / `todoSrv.uncheck()` ritorna `null` (documento non trovato nel DB)
+  - `notFoundHandler`: error handler Express (firma 4 parametri) — intercetta solo `instanceof NotFoundError`, risponde `404` con `{ error, message }`, altrimenti chiama `next(err)` per passare al prossimo handler
+
+- **`generic.error.ts`** — `genericErrorHandler`
+  - Fallback finale della catena — nessun `if`, nessun `next(err)` — risponde sempre `500` con `{ error, message }`
+  - Deve essere **sempre l'ultimo** nell'array degli handler perché non passa mai al successivo
+
+- **`validation-error.ts`** — classe `ValidationError extends Error` + `validationHandler`
+  - `ValidationError`: errore custom che wrappa l'array di `OriginalValidationError[]` da `class-validator`
+  - Nel costruttore: estrae i messaggi da `error.constraints` (oggetto `{ nomeRegola: messaggio }`) con `Object.values()`, li concatena in una stringa leggibile
+  - Conserva `originalErrors` per la response dettagliata
+  - `validationHandler`: intercetta solo `instanceof ValidationError`, risponde `400` con `{ error, message, details[] }` dove ogni detail espone `property`, `value`, `constraints`
+  - `import type` usato per l'import da `class-validator` — importa solo il tipo TypeScript, zero overhead a runtime
+
+- **`index.ts`** — barrel file che esporta `errorHandlers` array
+  - Array corretto (aggiornato durante la sessione):
+    ```typescript
+    export const errorHandlers = [
+      validationHandler,
+      notFoundHandler,
+      genericErrorHandler,
+    ];
+    ```
+  - **Ordine critico**: handler specifici prima, `genericErrorHandler` sempre per ultimo
+  - Bug identificato e corretto: inizialmente `validationHandler` era assente dall'array
+
+#### Flusso errori completo (Express 5)
+
+```
+Request → Router → Middleware validate() → Controller → Service
+                         ↓ (se errore)
+                   next(new ValidationError())
+                         ↓
+                   app.use(errorHandlers)
+                         ↓
+                   validationHandler → se non suo: next(err)
+                         ↓
+                   notFoundHandler → se non suo: next(err)
+                         ↓
+                   genericErrorHandler → risponde 500
+```
+
+#### Concetto appreso — ordine degli error handler
+
+- Gli handler Express vengono eseguiti in sequenza nell'ordine in cui sono registrati
+- Ogni handler controlla con `instanceof` se l'errore è di sua competenza
+- Se non è di sua competenza: chiama `next(err)` per passare al successivo
+- Il `genericErrorHandler` non ha `if` né `next(err)` → è il terminatore della catena → deve stare per ultimo
+
+---
+
+### Validazione input — `class-validator` + `class-transformer`
+
+#### File creato: `src/utils/validation-middleware.ts`
+
+- Middleware factory `validateFn<T>(dtoClass, origin)` — genera un middleware Express a partire da una classe DTO e un'origine (`'body'` | `'query'` | `'params'`)
+- **TypeScript overload signatures**: tre firme dichiarate per tipizzare correttamente `req.body`, `req.query`, `req.params` in base all'`origin` passato — a runtime esiste una sola implementazione
+- **`plainToClass(dtoClass, req[origin])`** (`class-transformer`): converte il plain object da Express in un'istanza vera della classe DTO — necessario perché `class-validator` funziona solo su istanze di classi, non su plain objects
+- **`classValidate(data)`** (`class-validator`): esegue tutti i decorator sull'istanza e ritorna array di `ValidationError[]`
+- Se validazione ok: sovrascrive `req[origin]` con l'istanza tipizzata e chiama `next()`
+- Se validazione fallisce: chiama `next(new ValidationError(errors))` — entra nella catena error handler
+- Fix per Express 5: `Object.defineProperty` su `req.query` per renderlo writable (Express 5 lo rende read-only di default)
+
+#### Integrazione in `todo.router.ts`
+
+```typescript
+router.get("/", validate(ShowCompletedDto, "query"), getTodoList);
+router.post("/", validate(AddTodoDto, "body"), addTodo);
+router.patch("/:id/check", validate(IdParams, "params"), checkTodo);
+router.patch("/:id/uncheck", validate(IdParams, "params"), uncheckTodo);
+```
+
+- Il middleware `validate()` viene eseguito **prima** del controller — se fallisce, il controller non viene mai raggiunto
+
+---
+
+### DTO aggiornati — `src/api/todo.dto.ts`
+
+#### `IdParams` (`src/utils/id-params.ts`)
+
+```typescript
+@IsMongoId()
+id: string;
+```
+
+- `@IsMongoId()`: valida che la stringa sia un ObjectId MongoDB valido (24 caratteri hex)
+- Intercetta id malformati **prima** che arrivino a Mongoose → risponde `400` invece di `500` (CastError)
+
+#### `ShowCompletedDto` — versione finale
+
+```typescript
+@IsOptional()
+@IsBooleanString()
+showCompleted?: string;
+```
+
+- `@IsOptional()`: senza questo decorator, `class-validator` tratta il campo come obbligatorio anche se TypeScript lo marca con `?`
+- `@IsBooleanString()` preferito a `@IsBoolean() + @Type(() => Boolean)` — motivo: `Boolean("false")` in JavaScript ritorna `true` (qualsiasi stringa non vuota è truthy) → conversione a boolean nativo non sicura per le query string
+- Rimane `string` nel tipo → il service mantiene `if (filter.showCompleted !== "true")`
+- Il backend non fa assunzioni sul frontend — rispetta il contratto della spec OpenAPI indipendentemente da chi chiama l'API
+
+#### `AddTodoDto` — versione finale
+
+```typescript
+@IsString()
+@IsNotEmpty()
+title: string;
+
+@IsOptional()
+@IsDate()
+@Type(() => Date)
+dueDate?: Date;
+```
+
+- `@IsNotEmpty()` aggiunto su `title`: `@IsString()` da solo accetta stringhe vuote `""` — `@IsNotEmpty()` garantisce che il titolo abbia contenuto
+- `@IsOptional()` aggiunto su `dueDate`: necessario per non rendere il campo obbligatorio
+- `@Type(() => Date)` (`class-transformer`): converte la stringa ISO dal JSON in oggetto `Date` JavaScript **prima** che `@IsDate()` la validi — senza questa conversione `@IsDate()` fallirebbe sempre perché il JSON trasporta le date come stringhe
+- La coppia `@Type(() => Date)` + `@IsDate()` è necessaria: il primo converte, il secondo valida — non sono intercambiabili
+
+---
+
+### Concetti appresi
+
+- **`instanceof` negli error handler**: meccanismo per riconoscere il tipo di errore a runtime e rispondere con lo status code corretto — alternativa tipizzata al confronto su `err.name`
+- **`Object.values(constraints)`**: `constraints` in `class-validator` è `{ nomeDecorator: messaggioErrore }` — `Object.values()` estrae solo i messaggi
+- **`!` non-null assertion operator TypeScript**: dice al compilatore "so che questo valore non è null/undefined" — usato su `error.constraints!` dove siamo certi che esista se la validazione è fallita
+- **`import type`**: importa solo la definizione TypeScript, viene eliminato completamente a runtime — utile per evitare dipendenze circolari e ridurre il bundle
+- **`Boolean("false") === true`**: in JavaScript qualsiasi stringa non vuota è truthy — `@Type(() => Boolean)` non è adatto per convertire query string booleane
+- **Principio**: il backend deve rispettare il contratto della spec API senza fare assunzioni su chi lo chiama (frontend, mobile, Postman, ecc.)
+- **DRY negli error handler**: separare gli handler per tipo di errore evita di ripetere la stessa logica `if/else` in ogni controller
+
+---
+
 ### Prossimo step
 
 - Inizio **frontend Angular**
