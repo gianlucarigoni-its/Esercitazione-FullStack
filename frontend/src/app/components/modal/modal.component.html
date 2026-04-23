@@ -1,1 +1,50 @@
-<p>modal works!</p>
+<div>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Create Todo</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <label class="form-label"> <i class="bi bi-card-text me-1"></i>Title </label>
+          <input
+            class="form-control"
+            type="text"
+            placeholder="What do you need to do?"
+            [value]="title()"
+            (input)="title.set($any($event.target).value)"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            <i class="bi bi-calendar3 me-1"></i>Due date <span class="text-muted">(optional)</span>
+          </label>
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dueDate"
+              ngbDatepicker
+              #dp="ngbDatepicker"
+              [ngModel]="dueDateInput()"
+              (ngModelChange)="dueDateInput.set($event)"
+            />
+            <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
+              <i class="bi bi-calendar3"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">
+        <i class="bi bi-x-circle me-1"></i>Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="modal.close()">
+        <i class="bi bi-plus-square me-1"></i>Create
+      </button>
+    </div>
+  </ng-template>
+
+  <button class="btn btn-outline-primary" (click)="open(content)">Create Todo</button>
+</div>

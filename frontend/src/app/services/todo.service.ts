@@ -1,5 +1,5 @@
-import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import type { Todo } from './../entities/todo.entity';
 
 @Injectable({
@@ -50,6 +50,8 @@ export class TodoService {
         const clone = structuredClone(this.internal());
         clone[index] = updated;
         this.internal.set(clone);
+
+        this.fetch();
       });
     } else {
       this.http.patch<Todo>(`/api/todos/${id}/uncheck`, null).subscribe((updated) => {
@@ -62,6 +64,8 @@ export class TodoService {
         const clone = structuredClone(this.internal());
         clone[index] = updated;
         this.internal.set(clone);
+
+        this.fetch();
       });
     }
   }

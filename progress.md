@@ -345,10 +345,12 @@ dueDate?: Date;
 ### Dipendenze installate
 
 #### `@ng-bootstrap/ng-bootstrap@20.0.0`
+
 - Installato con `ng add @ng-bootstrap/ng-bootstrap` — usa `ng add` invece di `npm install` perché esegue anche uno **schematic**: script automatico che modifica `package.json`, `angular.json`, `main.ts`, `tsconfig.app.json`
 - `ng add` aggiunge automaticamente `provideHttpClient()` in `app.config.ts`
 
 #### Bootstrap Icons
+
 - Aggiunto via CDN in `src/index.html` — libreria separata da Bootstrap CSS, non inclusa da `ng add`
 - Permette uso delle classi `bi bi-*` nei template HTML
 
@@ -357,15 +359,19 @@ dueDate?: Date;
 ### Configurazione
 
 #### Proxy `/api` — `proxy.config.json`
+
 - File creato: `frontend/proxy.config.json`
 - Redirige tutte le richieste `/api/**` verso `http://localhost:3000` — evita CORS in sviluppo
 - Registrato in `angular.json` sotto `serve.options.proxyConfig`
 
 #### Schematics Angular — `angular.json`
+
 - Aggiunta sezione `schematics` per aggiungere suffisso `.component.` ai file generati:
+
 ```json
   "@schematics/angular:component": { "type": "component" }
 ```
+
 - Motivazione: `ng generate component` genera 4 file per componente — il suffisso rende immediatamente riconoscibile il tipo di file nel file explorer e nei tab di VS Code
 
 ---
@@ -388,6 +394,7 @@ dueDate?: Date;
 ### `frontend/src/app/entities/todo.entity.ts` — creato
 
 - Interface `Todo` che rispecchia la response del backend:
+
 ```typescript
   id: string
   title: string
@@ -422,16 +429,19 @@ dueDate?: Date;
 ### `frontend/src/app/components/todo-list/todo-list.component.ts` — implementato
 
 #### Imports nel decoratore `@Component`
+
 - `DatePipe` — pipe Angular per formattare le date nel template
 - `NgbInputDatepicker` — componente datepicker di ng-bootstrap
 - `FormsModule` — necessario per `ngModel` nel template
 
 #### Stato del componente
+
 - `showCompleted = false` — booleano semplice (non signal, non serve reattività)
 - `title = signal<string>('')` — titolo del nuovo todo
 - `dueDateInput = signal<NgbDateStruct | null>(null)` — data selezionata dal datepicker, tipo `NgbDateStruct` (oggetto `{ year, month, day }`) perché ng-bootstrap non usa `Date` nativo
 
 #### Metodi implementati
+
 - **`getShowCompleted()`** — toggling con `!this.showCompleted` + chiamata `fetch`
 - **`open(content: TemplateRef<any>)`** — apre il modal ng-bootstrap, gestisce `.result.then()`:
   - callback successo → converte la data + chiama `addTodo`
@@ -439,6 +449,7 @@ dueDate?: Date;
 - **`getDate(dueDate: NgbDateStruct): Date`** — converte `NgbDateStruct` in `Date` JavaScript con `new Date(year, month - 1, day)`. Il `-1` è necessario perché JavaScript conta i mesi da 0 (Gennaio=0) mentre ng-bootstrap conta da 1 (Gennaio=1)
 
 #### Concetti appresi — NgbModal
+
 - `NgbModal` è un servizio che gestisce ciclo di vita dei modal
 - `modalService.open(content)` riceve un `TemplateRef` — il blocco `<ng-template #content>` dall'HTML
 - `.result` è una Promise: `then(onClose, onDismiss)` — `close()` risolve, `dismiss()` rigetta
@@ -448,6 +459,7 @@ dueDate?: Date;
 ### `frontend/src/app/components/todo-list/todo-list.component.html` — implementato
 
 #### Toolbar
+
 - Layout con `d-flex justify-content-around align-items-center`
 - **Toggle switch** con `form-check form-switch`:
   - `[checked]="showCompleted"` — property binding, sincronizza visivamente la checkbox con lo stato
@@ -456,6 +468,7 @@ dueDate?: Date;
 - **Bottone "Create Todo"** con `(click)="open(content)"`
 
 #### Modal ng-bootstrap (`<ng-template #content let-modal>`)
+
 - `let-modal` — espone l'istanza del modal nel template per chiamare `modal.close()` / `modal.dismiss()`
 - Campo **title**: `[value]="title()"` + `(input)="title.set($any($event.target).value)"`
 - Campo **dueDate** con `ngbDatepicker`:
@@ -466,6 +479,7 @@ dueDate?: Date;
 - Footer con bottone **Cancel** (`modal.dismiss()`) e **Create** (`modal.close()`)
 
 #### Lista todo
+
 - `<div class="list-group">` fuori dal `@for` — un solo contenitore, non uno per elemento
 - `@for (todo of todoList(); track todo.id)` — loop su signal readonly
 - Classi contestuali Bootstrap:
@@ -500,3 +514,182 @@ dueDate?: Date;
 - Implementare toggle completamento (checkbox per ogni todo → `updateTodoStatus`)
 - Separare il modal in `todo-modal` component
 - Testare il flusso completo end-to-end
+
+---
+
+## 23/04/2026 — todo-item component + toggle completamento
+
+### Concetti discussi
+
+- **Card vs List-group**: scelta motivata dal tipo di contenuto — la lista è più adatta per todo (elementi densi, verticali, pattern consolidato). Le card hanno senso per entità ricche con immagini e azioni multiple. La scelta del layout HTML è indipendente dalla decisione di componentizzare
+- **Quando componentizzare**: il criterio non è il tipo di elemento HTML usato, ma la complessità del singolo elemento — logica propria, template non banale, riutilizzo
+
+---
+
+### `todo-item.component.ts` — implementato
+
+- `todo = input.required<Todo>()` — input signal obbligatorio, riceve il todo dal parent
+- `onChange = output<boolean>()` — output che emette il nuovo stato di completamento verso il parent
+- **`changeCompleted()`** — emette `!this.todo().completed` per invertire lo stato corrente
+
+### `todo-item.component.html` — implementato
+
+- `[class.list-group-item-success]="todo().completed"` — sfondo verde se completato
+- `[class.list-group-item-danger]="todo().expired"` — sfondo rosso se scaduto
+- `@if (todo().dueDate !== undefined)` — mostra la data solo se presente, altrimenti "Nessuna scadenza"
+- `{{ todo().dueDate | date: 'mediumDate' }}` — formattazione data con `DatePipe`
+- **Checkbox toggle** con `form-check form-switch`:
+  - `[checked]="todo().completed"` — property binding, sincronizza la checkbox con lo stato del todo
+  - `(change)="changeCompleted()"` — emette l'evento verso il parent al click
+
+---
+
+### `todo-list.component.html` — aggiornato
+
+- Sostituito il template inline del singolo todo con `<app-todo-item>`
+- `[todo]="todo"` — passa il todo come input
+- `(onChange)="changeCompleted(todo.id, $event)"` — riceve l'evento dal figlio con l'id e il nuovo stato
+
+### `todo-list.component.ts` — aggiornato
+
+- **`changeCompleted(id: string, completed: boolean)`** — riceve id e nuovo stato da `todo-item`, delega a `todoSrv.updateTodoStatus(id, completed)`
+
+---
+
+### Flusso input/output cablato
+
+```
+todo-list → [todo] → todo-item         (padre passa i dati al figlio)
+todo-item → (onChange) → todo-list     (figlio comunica evento al padre)
+todo-list → todoSrv.updateTodoStatus() (padre chiama il service)
+```
+
+### Test
+
+- ✅ Flusso end-to-end funzionante: click checkbox → backend aggiornato → stato UI aggiornato
+
+---
+
+### Prossimo step
+
+- Separare il modal in `todo-modal` component (definire input/output)
+
+## 23/04/2026 — Separazione ModalComponent + refactoring
+
+### Obiettivo
+
+Separare il modal in un componente autonomo `app-modal` e cablarlo correttamente con `todo-list`.
+
+---
+
+### Problema architetturale affrontato: comunicazione padre → figlio
+
+#### Situazione iniziale (errata)
+
+Il padre (`todo-list`) tentava di chiamare `open(content)` passando `#content` come parametro:
+
+```html
+<!-- todo-list.component.html -->
+<button (click)="open(content)">Create Todo</button>
+```
+
+Il problema: `#content` è una template reference variable che vive **nel template del figlio** (`modal.component.html`). Il padre non può accedervi — Angular non espone le variabili template dei figli al padre.
+
+#### Soluzione adottata
+
+Il template `#content` e il metodo `open()` vivono entrambi nel `ModalComponent`. Il bottone "Create Todo" è stato spostato **dentro il figlio**, che gestisce autonomamente apertura e contenuto del modal. Il padre usa `(onAdd)` per ricevere i dati al submit.
+
+---
+
+### `modal.component.ts` — implementato
+
+#### Imports
+
+- `TemplateRef` — per tipizzare la reference al `<ng-template>`
+- `signal` — per gestire lo stato interno del form
+- `output` — per emettere i dati al padre
+- `inject` — per iniettare `NgbModal`
+- `NgbInputDatepicker`, `NgbDateStruct` — componente datepicker e tipo ng-bootstrap
+- `FormsModule` — necessario per `ngModel` nel template
+
+#### Stato interno
+
+- `title = signal<string>('')` — titolo del nuovo todo
+- `dueDateInput = signal<NgbDateStruct | undefined>(undefined)` — data selezionata dal datepicker. Tipo scelto: `undefined` (non `null`) per coerenza con la convenzione TypeScript moderna degli optional
+
+#### Output
+
+- `onAdd = output<addDto>()` — emette `{ title: string, dueDate: Date | undefined }` al padre dopo il submit
+
+#### Metodi
+
+- **`open(content: TemplateRef<any>)`** — inietta il `TemplateRef` del proprio template e lo passa a `modalService.open()`. Gestisce la Promise con `.then(onClose, onDismiss).finally(reset)`:
+  - `onClose` → converte la data e chiama `this.onAdd.emit()`
+  - `onDismiss` → no-op (il dismiss non deve fare nulla di speciale)
+  - `finally` → resetta `title` e `dueDateInput` a valori vuoti in ogni caso
+- **`getDate(dueDate: NgbDateStruct): Date`** — converte `NgbDateStruct` in `Date` JavaScript
+
+---
+
+### Bug trovato e risolto: stato non resettato tra aperture
+
+#### Problema
+
+Al chiudere il modal (sia con "Create" che con "Cancel"), i signal `title` e `dueDateInput` mantenevano i valori dell'apertura precedente. Riaprendo il modal, i campi apparivano pre-compilati.
+
+#### Prima soluzione (con duplicazione)
+
+Reset inserito sia nel branch `onClose` che in `onDismiss` → violazione del principio **DRY** (Don't Repeat Yourself): stessa logica in due posti, rischio di dimenticare aggiornamenti futuri.
+
+#### Soluzione finale con `.finally()`
+
+```typescript
+.then(
+  (result) => { this.onAdd.emit(...) },
+  () => {}
+)
+.finally(() => {
+  this.title.set('');
+  this.dueDateInput.set(undefined);
+});
+```
+
+`.finally()` esegue sempre, sia in caso di `resolve` (close) che di `reject` (dismiss) — reset in un unico punto.
+
+---
+
+### Bug trovato e aperto: inconsistenza null vs undefined
+
+#### Problema rilevato
+
+La dichiarazione originale usava `signal<NgbDateStruct | null>(null)` ma il check era `!== undefined` e il reset usava `.set(undefined)` — tre convenzioni diverse per lo stesso concetto di "assenza di valore".
+
+#### Fix applicato
+
+Uniformato tutto a `undefined`:
+
+- Dichiarazione: `signal<NgbDateStruct | undefined>(undefined)`
+- Check: `this.dueDateInput() !== undefined`
+- Reset: `this.dueDateInput.set(undefined)`
+
+#### Problema aperto
+
+`ngbDatepicker` potrebbe restituire valori inattesi (es. `null`) quando l'utente cancella la selezione o digita a mano nel campo testo invece di usare il datepicker. La gestione di questi edge case nella conversione `NgbDateStruct → Date` è ancora da verificare.
+
+---
+
+### Concetti appresi
+
+- **`@ViewChild` per template interni**: un componente può referenziare il proprio `<ng-template>` con `@ViewChild('content') content!: TemplateRef<any>` — disponibile dopo `ngAfterViewInit`. Usato per passare il template a `NgbModal.open()` senza coinvolgere il padre
+- **`.finally()` sulle Promise**: eseguito sempre dopo `.then()`, indipendentemente da resolve o reject — utile per operazioni di cleanup (reset form, chiusura loader, ecc.)
+- **DRY — Don't Repeat Yourself**: principio ingegneristico che prescrive di non duplicare logica. La violazione aumenta il rischio di bug silenti quando si modifica solo una delle copie
+- **`null` vs `undefined` in TypeScript**: concetti distinti — `null` è assenza esplicita assegnata intenzionalmente; `undefined` è assenza implicita, valore di default per optional. Convenzione moderna: preferire `undefined` per i campi opzionali nei form e nei DTO
+- **Separazione responsabilità nel modal**: il padre non deve conoscere l'implementazione interna del modal (template, stato, apertura) — il figlio espone solo il bottone e l'output `onAdd`
+
+---
+
+### Prossimo step
+
+- Verificare il comportamento di `ngbDatepicker` quando l'utente digita la data a mano
+- Gestire edge case nella conversione `NgbDateStruct → Date`
+- Test end-to-end del flusso creazione todo con modal
