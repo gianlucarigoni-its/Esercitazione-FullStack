@@ -323,3 +323,180 @@ dueDate?: Date;
 - Struttura componenti da definire: lista, item, modal
 - Setup proxy `/api` per development
 - Installazione e configurazione **ng-bootstrap**
+
+## 23/04/2026 — Frontend Angular avviato + componenti base implementati
+
+### Setup progetto Angular
+
+- Progetto generato con `ng new frontend` dalla root della monorepo — crea una sottocartella autocontenuta con `package.json` e `node_modules` separati dal backend
+- Versione Angular: **21.2.0**, TypeScript **5.9.2** — approccio **Standalone Components** (no `NgModule`)
+- SSR disabilitato durante `ng new` — non necessario per questo progetto
+- Stylesheet format: **CSS**
+
+#### File generati da Angular CLI
+
+- `src/app/app.ts` — componente root, usa `signal` per il titolo
+- `src/app/app.config.ts` — configurazione providers dell'app (equivalente moderno di `AppModule`)
+- `src/app/app.routes.ts` — router Angular
+- `src/main.ts` — bootstrap con `bootstrapApplication(App, appConfig)`
+
+---
+
+### Dipendenze installate
+
+#### `@ng-bootstrap/ng-bootstrap@20.0.0`
+- Installato con `ng add @ng-bootstrap/ng-bootstrap` — usa `ng add` invece di `npm install` perché esegue anche uno **schematic**: script automatico che modifica `package.json`, `angular.json`, `main.ts`, `tsconfig.app.json`
+- `ng add` aggiunge automaticamente `provideHttpClient()` in `app.config.ts`
+
+#### Bootstrap Icons
+- Aggiunto via CDN in `src/index.html` — libreria separata da Bootstrap CSS, non inclusa da `ng add`
+- Permette uso delle classi `bi bi-*` nei template HTML
+
+---
+
+### Configurazione
+
+#### Proxy `/api` — `proxy.config.json`
+- File creato: `frontend/proxy.config.json`
+- Redirige tutte le richieste `/api/**` verso `http://localhost:3000` — evita CORS in sviluppo
+- Registrato in `angular.json` sotto `serve.options.proxyConfig`
+
+#### Schematics Angular — `angular.json`
+- Aggiunta sezione `schematics` per aggiungere suffisso `.component.` ai file generati:
+```json
+  "@schematics/angular:component": { "type": "component" }
+```
+- Motivazione: `ng generate component` genera 4 file per componente — il suffisso rende immediatamente riconoscibile il tipo di file nel file explorer e nei tab di VS Code
+
+---
+
+### Struttura componenti creata
+
+    src/app/
+    ├── components/
+    │   ├── todo-list/         ← pagina principale
+    │   ├── todo-item/         ← singolo elemento (da     popolare)
+    │   └── todo-modal/        ← modal creazione (da    separare)
+    └── services/
+    └── todo.service.ts    ← tutte le chiamate HTTP
+
+- Scelta **opzione B (per feature)** invece di flat — con 4 file per componente, la struttura flat diventerebbe ingestibile
+- Componenti generati con `ng generate component` / `ng generate service`
+
+---
+
+### `frontend/src/app/entities/todo.entity.ts` — creato
+
+- Interface `Todo` che rispecchia la response del backend:
+```typescript
+  id: string
+  title: string
+  dueDate?: string
+  completed: boolean
+  expired: boolean
+```
+
+---
+
+### `frontend/src/app/services/todo.service.ts` — implementato
+
+- `@Injectable({ providedIn: 'root' })` — registrato nel DI container globale (singleton), disponibile ovunque nell'app senza import nei componenti
+- `private http = inject(HttpClient)` — injection moderna senza costruttore
+- **Stato interno con Signals:**
+  - `private internal = signal<Todo[]>([])` — stato scrivibile privato
+  - `todos = this.internal.asReadonly()` — esposto in sola lettura ai componenti — i componenti non possono modificare lo stato direttamente
+- **`fetch(showCompleted?: boolean)`** — chiamata GET, due varianti:
+  - senza parametro → `GET /api/todos`
+  - con `showCompleted=true` → `GET /api/todos?showCompleted=true`
+  - Aggiorna `internal` con `.set(items)` alla risposta
+  - Chiamato nel constructor per il load iniziale
+- **`addTodo(title: string, dueDate: Date | undefined)`** — chiamata POST a `/api/todos`, aggiunge il nuovo todo allo stato con spread: `[...this.internal(), newItem]`
+- **`updateTodoStatus(id: string, completed: boolean)`** — chiama `/check` o `/uncheck` in base al booleano, aggiorna il todo corrispondente nell'array con `structuredClone` per immutabilità:
+  1. trova l'indice con `findIndex`
+  2. clona l'array con `structuredClone`
+  3. sostituisce l'elemento
+  4. chiama `internal.set(clone)`
+
+---
+
+### `frontend/src/app/components/todo-list/todo-list.component.ts` — implementato
+
+#### Imports nel decoratore `@Component`
+- `DatePipe` — pipe Angular per formattare le date nel template
+- `NgbInputDatepicker` — componente datepicker di ng-bootstrap
+- `FormsModule` — necessario per `ngModel` nel template
+
+#### Stato del componente
+- `showCompleted = false` — booleano semplice (non signal, non serve reattività)
+- `title = signal<string>('')` — titolo del nuovo todo
+- `dueDateInput = signal<NgbDateStruct | null>(null)` — data selezionata dal datepicker, tipo `NgbDateStruct` (oggetto `{ year, month, day }`) perché ng-bootstrap non usa `Date` nativo
+
+#### Metodi implementati
+- **`getShowCompleted()`** — toggling con `!this.showCompleted` + chiamata `fetch`
+- **`open(content: TemplateRef<any>)`** — apre il modal ng-bootstrap, gestisce `.result.then()`:
+  - callback successo → converte la data + chiama `addTodo`
+  - callback dismiss → no-op
+- **`getDate(dueDate: NgbDateStruct): Date`** — converte `NgbDateStruct` in `Date` JavaScript con `new Date(year, month - 1, day)`. Il `-1` è necessario perché JavaScript conta i mesi da 0 (Gennaio=0) mentre ng-bootstrap conta da 1 (Gennaio=1)
+
+#### Concetti appresi — NgbModal
+- `NgbModal` è un servizio che gestisce ciclo di vita dei modal
+- `modalService.open(content)` riceve un `TemplateRef` — il blocco `<ng-template #content>` dall'HTML
+- `.result` è una Promise: `then(onClose, onDismiss)` — `close()` risolve, `dismiss()` rigetta
+
+---
+
+### `frontend/src/app/components/todo-list/todo-list.component.html` — implementato
+
+#### Toolbar
+- Layout con `d-flex justify-content-around align-items-center`
+- **Toggle switch** con `form-check form-switch`:
+  - `[checked]="showCompleted"` — property binding, sincronizza visivamente la checkbox con lo stato
+  - `(change)="getShowCompleted()"` — event binding, aggiorna lo stato al click
+  - `form-check-reverse` per label a sinistra del toggle
+- **Bottone "Create Todo"** con `(click)="open(content)"`
+
+#### Modal ng-bootstrap (`<ng-template #content let-modal>`)
+- `let-modal` — espone l'istanza del modal nel template per chiamare `modal.close()` / `modal.dismiss()`
+- Campo **title**: `[value]="title()"` + `(input)="title.set($any($event.target).value)"`
+- Campo **dueDate** con `ngbDatepicker`:
+  - `[ngModel]="dueDateInput()"` — one-way binding dal signal al datepicker
+  - `(ngModelChange)="dueDateInput.set($event)"` — aggiorna il signal quando l'utente seleziona una data
+  - `name="dueDate"` — obbligatorio quando `ngModel` è dentro un tag `<form>` (altrimenti errore `NG01352`)
+  - `#dp="ngbDatepicker"` — reference locale per chiamare `dp.toggle()` dal bottone calendario
+- Footer con bottone **Cancel** (`modal.dismiss()`) e **Create** (`modal.close()`)
+
+#### Lista todo
+- `<div class="list-group">` fuori dal `@for` — un solo contenitore, non uno per elemento
+- `@for (todo of todoList(); track todo.id)` — loop su signal readonly
+- Classi contestuali Bootstrap:
+  - `[class.list-group-item-success]="todo.completed"` → sfondo verde
+  - `[class.list-group-item-danger]="todo.expired"` → sfondo rosso
+- `@if (todo.dueDate !== undefined)` — mostra la data solo se presente
+- `{{ todo.dueDate | date: 'mediumDate' }}` — pipe `DatePipe` per formattare la data
+
+---
+
+### Concetti appresi
+
+- **Standalone Components**: no `NgModule` — ogni componente dichiara i propri `imports` nel decoratore. I provider globali si registrano in `app.config.ts` con funzioni `provide*()`
+- **`provideHttpClient()`**: registra `HttpClient` nel DI container — senza questo, qualsiasi inject di `HttpClient` lancia errore a runtime
+- **`providedIn: 'root'`**: il service viene istanziato una volta sola (singleton) e condiviso in tutta l'app — non serve importarlo nei componenti
+- **`signal.asReadonly()`**: espone un signal in sola lettura — i consumer possono leggere ma non scrivere. Pattern per proteggere lo stato interno di un service
+- **`structuredClone()`**: copia profonda di un oggetto/array — garantisce immutabilità aggiornando lo stato senza mutare l'array originale
+- **`[property]` vs `(event)`**: due direzioni del data flow in Angular — `[checked]` va da TS al DOM (one-way in), `(change)` va dal DOM a TS (one-way out)
+- **`$event` negli event handler**: oggetto evento nativo del browser — `$event.target.value` per leggere il valore di un input
+- **`NgbDateStruct`**: tipo ng-bootstrap per le date `{ year, month, day }` — i mesi partono da 1, non da 0 come in JavaScript nativo → necessario `month - 1` nella conversione
+- **`TemplateRef`**: riferimento a un blocco `<ng-template>` — si passa a `NgbModal.open()` per renderizzare il contenuto del modal
+- **`ngModel` dentro `<form>`**: richiede attributo `name` sul campo oppure `[ngModelOptions]="{standalone: true}"` — senza, Angular lancia errore `NG01352`
+- **`ng add` vs `npm install`**: `ng add` scarica il pacchetto + esegue schematic di configurazione automatica; `npm install` scarica solo il pacchetto
+- **Block-level elements e `width: auto`**: un `div` è block-level per default — `width: auto` si espande alla larghezza del contenitore, non del contenuto. Per restringersi al contenuto: `d-inline-block` o `d-inline-flex`
+- **`!` non-null assertion operator**: dice a TypeScript "so che questo valore non è null" — usato dopo un controllo esplicito `!== null`
+
+---
+
+### Prossimo step
+
+- Implementare `todo-item` component (estrarre il singolo elemento dalla lista)
+- Implementare toggle completamento (checkbox per ogni todo → `updateTodoStatus`)
+- Separare il modal in `todo-modal` component
+- Testare il flusso completo end-to-end
