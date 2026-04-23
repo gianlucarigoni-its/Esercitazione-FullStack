@@ -1,14 +1,14 @@
-import { DatePipe } from '@angular/common';
 import { Component, inject, signal, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { TodoItemComponent } from '../todo-item/todo-item.component';
 import { TodoService } from './../../services/todo.service';
 
 @Component({
   selector: 'app-todo-list',
-  imports: [DatePipe, NgbInputDatepicker, FormsModule],
+  imports: [NgbInputDatepicker, FormsModule, TodoItemComponent],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.css',
 })
@@ -41,5 +41,9 @@ export class TodoListComponent {
 
   getDate(dueDate: NgbDateStruct) {
     return new Date(dueDate.year, dueDate.month - 1, dueDate.day);
+  }
+
+  changeCompleted(id: string, event: boolean) {
+    this.todoSrv.updateTodoStatus(id, event);
   }
 }
