@@ -1,0 +1,19 @@
+# Dipendenze
+backend/node_modules/
+frontend/node_modules/
+frontend/.angular/
+frontend/.vscode/
+
+# Output di compilazione TypeScript
+backend/dist/
+backend/build/
+
+# File di log e temporanei
+backend/npm-debug.log
+backend/.DS_Store
+
+# File statici (se ne hai)
+backend/public/
+frontend/public/
+
+backend/src/utils/validation-middleware.ts

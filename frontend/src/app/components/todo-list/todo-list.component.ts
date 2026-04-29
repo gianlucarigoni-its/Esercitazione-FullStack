@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../modal/modal.component';
 import { TodoItemComponent } from '../todo-item/todo-item.component';
@@ -14,15 +14,15 @@ export class TodoListComponent {
   todoSrv = inject(TodoService);
   todoList = this.todoSrv.todos;
 
-  showCompleted = false;
+  showCompleted = signal<boolean>(false);
 
   getShowCompleted() {
-    this.showCompleted = !this.showCompleted;
-    this.todoSrv.fetch(this.showCompleted);
+    this.showCompleted.set(!this.showCompleted());
+    this.todoSrv.fetch(this.showCompleted());
   }
 
-  changeCompleted(id: string, event: boolean) {
-    this.todoSrv.updateTodoStatus(id, event);
+  changeStatus(id: string, event: boolean) {
+    this.todoSrv.updateTodoStatus(id, event, this.showCompleted());
   }
 
   addTodo(title: string, dueDate?: Date) {

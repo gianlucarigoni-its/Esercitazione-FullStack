@@ -1,6 +1,6 @@
-import { faker } from "@faker-js/faker/locale/it";
-import { TodoModel } from "./src/api/todo/todo.module";
-import mongoose from "mongoose";
+import { faker } from '@faker-js/faker/locale/it';
+import mongoose from 'mongoose';
+import { TodoModel } from './src/api/todo/todo.model';
 
 function generateRandomTodo() {
   let dueDate: Date | undefined = undefined;
@@ -8,7 +8,7 @@ function generateRandomTodo() {
   if (faker.datatype.boolean({ probability: 0.75 })) {
     dueDate = faker.date.soon({
       days: 150,
-      refDate: "2026-04-21T23:59:59.000Z",
+      refDate: '2026-04-21T23:59:59.000Z',
     });
   }
 
@@ -26,7 +26,7 @@ function generateTodos(num: number) {
 
 const num = 30;
 mongoose
-  .connect("mongodb://localhost:27017/simulazione_01")
+  .connect('mongodb://localhost:27017/simulazione_01')
   .then(() => {
     return TodoModel.deleteMany({});
   })

@@ -13,6 +13,6 @@ mongoose
       console.log(`server listening on port 3000`);
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.error(err);
   });

@@ -3,8 +3,5 @@ export interface Todo {
   title: string;
   dueDate?: Date | null;
   completed: boolean;
-}
-
-export interface TodoExtended extends Todo {
   expired: boolean;
 }

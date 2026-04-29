@@ -201,11 +201,7 @@
 - **`index.ts`** — barrel file che esporta `errorHandlers` array
   - Array corretto (aggiornato durante la sessione):
     ```typescript
-    export const errorHandlers = [
-      validationHandler,
-      notFoundHandler,
-      genericErrorHandler,
-    ];
+    export const errorHandlers = [validationHandler, notFoundHandler, genericErrorHandler];
     ```
   - **Ordine critico**: handler specifici prima, `genericErrorHandler` sempre per ultimo
   - Bug identificato e corretto: inizialmente `validationHandler` era assente dall'array
@@ -250,10 +246,10 @@ Request → Router → Middleware validate() → Controller → Service
 #### Integrazione in `todo.router.ts`
 
 ```typescript
-router.get("/", validate(ShowCompletedDto, "query"), getTodoList);
-router.post("/", validate(AddTodoDto, "body"), addTodo);
-router.patch("/:id/check", validate(IdParams, "params"), checkTodo);
-router.patch("/:id/uncheck", validate(IdParams, "params"), uncheckTodo);
+router.get('/', validate(ShowCompletedDto, 'query'), getTodoList);
+router.post('/', validate(AddTodoDto, 'body'), addTodo);
+router.patch('/:id/check', validate(IdParams, 'params'), checkTodo);
+router.patch('/:id/uncheck', validate(IdParams, 'params'), uncheckTodo);
 ```
 
 - Il middleware `validate()` viene eseguito **prima** del controller — se fallisce, il controller non viene mai raggiunto
@@ -693,3 +689,253 @@ Uniformato tutto a `undefined`:
 - Verificare il comportamento di `ngbDatepicker` quando l'utente digita la data a mano
 - Gestire edge case nella conversione `NgbDateStruct → Date`
 - Test end-to-end del flusso creazione todo con modal
+
+## 28/04/2026 — Gestione errori backend + Validazione input
+
+### Obiettivo
+
+Implementare un sistema di gestione errori strutturato e una pipeline di validazione
+degli input lato backend, sostituendo l'approccio precedente (nessun error handler,
+`null` come valore di ritorno ambiguo).
+
+---
+
+### Architettura errori — `src/errors/`
+
+Creata cartella dedicata con un file per ogni responsabilità:
+
+#### `generic.error.ts`
+
+- Handler di fallback finale nella catena
+- Risponde sempre `500` con `{ error, message }`
+- Cattura qualsiasi errore non gestito dagli handler precedenti
+  (es. errori di connessione DB, errori imprevisti)
+
+#### `not-found.error.ts`
+
+- Classe custom `NotFoundError extends Error` con `name: "NotFound"`
+  e `message: "Entity not found"`
+- Handler `notFoundHandler`: se `err instanceof NotFoundError` → risponde `404`,
+  altrimenti `next(err)` per passare al prossimo handler
+- Pattern `else next(err)` fondamentale: senza di esso gli errori
+  non gestiti verrebbero inghiottiti silenziosamente
+
+#### `validation.error.ts`
+
+- Classe custom `ValidationError extends Error` che accetta
+  `OriginalValidationError[]` da `class-validator`
+- Costruisce il `message` concatenando tutti i `constraints` degli errori
+- Salva `originalErrors` per esporre i dettagli nella response
+- Handler `validationHandler`: risponde `400` con `{ error, message, details }`
+  dove `details` espone `property`, `value`, `constraints` per ogni campo invalido
+
+#### `already-checked.error.ts` / `already-unchecked.error.ts`
+
+- Classi custom per stati semanticamente distinti:
+  tentativo di checkare un todo già completato o di uncheckare uno già attivo
+- Rispondono con status code appropriato (4xx)
+
+#### `index.ts` — barrel export
+
+- Esporta `errorHandlers`: array ordinato di tutti gli handler
+- Ordine critico: handler specifici prima, `genericErrorHandler` sempre ultimo
+- Registrato in `app.ts` con `app.use(errorHandlers)` dopo tutte le route
+
+---
+
+### Concetti appresi — Error handling Express
+
+- **Error handler Express**: firma a 4 parametri `(err, req, res, next)` —
+  Express lo riconosce come error handler proprio per la firma a 4 argomenti
+- **Catena di handler**: ogni handler specifico deve chiamare `next(err)`
+  se l'errore non è di sua competenza, altrimenti la catena si interrompe
+  e l'errore viene inghiottito
+- **Ordine di registrazione**: gli handler vengono eseguiti nell'ordine
+  in cui sono registrati — il fallback generico deve sempre essere l'ultimo
+- **Express 5 + async**: gestisce automaticamente gli errori nelle route async,
+  chiamando `next(err)` internamente — non serve wrappare manualmente ogni handler
+
+---
+
+### Validazione input — `src/utils/validation-middleware.ts`
+
+#### Dipendenze utilizzate
+
+- **`class-validator`**: libreria per validazione dichiarativa tramite decoratori
+- **`class-transformer`**: converte oggetti plain JavaScript in istanze di classi TypeScript
+
+#### Perché `plainToClass` è necessario
+
+- `req.body`, `req.query`, `req.params` sono oggetti plain `{}` senza prototipo
+- `class-validator` legge i decoratori dai metadati della **classe** — non li trova
+  su oggetti plain
+- `plainToClass(DtoClass, req.body)` crea una vera istanza della classe
+  con i valori del body → i decoratori diventano "visibili" al validatore
+
+#### Implementazione `validateFn`
+
+- **Function overloading TypeScript**: tre firme distinte per `'body'`, `'query'`, `'params'`
+  — garantisce type safety sul `TypedRequest` a seconda dell'origine validata
+- Flusso: `plainToClass` → `classValidate` → se errori `next(new ValidationError(errors))`,
+  altrimenti `req[origin] = data` e `next()`
+- **Fix Express 5**: `req.query` è read-only in Express 5 — risolto con
+  `Object.defineProperty` per renderlo writable prima dell'assegnazione
+
+#### Registrazione nelle route
+
+Il middleware di validazione viene eseguito **prima** del controller —
+se la validazione fallisce il controller non viene mai raggiunto.
+
+---
+
+### `IdParams` — `src/utils/id-params.ts`
+
+```typescript
+export class IdParams {
+  @IsMongoId()
+  id: string;
+}
+```
+
+- Decoratore `@IsMongoId()` valida il formato ObjectId di MongoDB
+- Previene il `CastError` di Mongoose a monte: se l'id è malformato,
+  viene bloccato dal middleware di validazione con `400` prima di
+  raggiungere il DB
+
+---
+
+### Refactoring service — `todo.service.ts`
+
+```
+GET/todos → validate(ShowCompletedDto, 'query') → getTodoList
+POST/todos → validate(AddTodoDto, 'body') → addTodo
+PATCH/todos/:id/check → validate(IdParams, 'params') → checkTodo
+PATCH/todos/:id/uncheck → validate(IdParams, 'params') → uncheckTodo
+```
+
+#### Problema risolto
+
+Il service restituiva `null` in due casi distinti:
+
+- Documento non trovato
+- Documento trovato ma già nello stato richiesto
+  Il controller non poteva distinguere i due casi con un singolo `null`.
+
+#### Soluzione adottata: `CheckResult` enum
+
+- Creato `src/api/todo.enums.ts` con:
+
+```typescript
+export enum CheckResult {
+  NotFound,
+  AlreadyDone,
+}
+```
+
+- Enum scelto al posto di magic numbers (`0`, `-1`) per leggibilità,
+  semantica esplicita e type safety
+- Posizionato in `todo.enums.ts` (non in `utils/` perché specifico
+  del dominio Todo, non generico)
+
+#### Nuova firma dei metodi
+
+```typescript
+async check(id: IdParams): Promise<Todo | CheckResult>
+async uncheck(id: IdParams): Promise<Todo | CheckResult>
+```
+
+- Se operazione riuscita → ritorna il documento `Todo` aggiornato
+- Se non trovato → `CheckResult.NotFound`
+- Se già nello stato richiesto → `CheckResult.AlreadyDone`
+
+---
+
+### Refactoring controller — `todo.controller.ts`
+
+```typescript
+const result = await todoSrv.check(req.params);
+if (result === CheckResult.NotFound) throw new NotFoundError();
+else if (result === CheckResult.AlreadyDone) throw new AlreadyCheckedError();
+else res.status(200).json(result);
+```
+
+- `try/catch` mantenuto per catturare errori imprevisti dal DB
+  (es. errori di connessione) non coperti dalla validazione
+- Il `throw` dentro il `try` viene immediatamente catturato dal `catch`
+  e passato a `next(err)` — funzionale, scelto per leggibilità esplicita
+
+---
+
+### Concetti appresi
+
+- **Magic numbers**: valori numerici senza nome (`0`, `-1`) usati come
+  codici di stato interni — code smell perché perdono significato
+  fuori contesto. Soluzione: enum con nomi espliciti
+- **Enum TypeScript**: tipo che definisce un insieme finito di valori nominati.
+  Compilato in oggetto JS. Garantisce type safety e autocompletamento IDE.
+  Preferire nomi semantici (`CheckResult.NotFound`) ai valori raw (`0`)
+- **`class-validator` + `class-transformer`**: lavorano in coppia —
+  `plainToClass` crea l'istanza tipizzata, `validate` controlla i decoratori
+- **Separation of Concerns service/controller**: il service conosce il dominio
+  (cosa è successo), il controller conosce HTTP (come rispondere).
+  L'enum è il contratto tra i due livelli senza accoppiamento diretto
+- **Barrel export**: `index.ts` che ri-esporta tutto da una cartella —
+  permette import puliti (`from '../errors'`) invece di path specifici per ogni file
+
+## 29/04/2026 — Verifica finale backend + fix status code
+
+### Obiettivo
+
+Revisione sistematica del backend per verificare la conformità completa
+alle specifiche del progetto prima di passare al frontend.
+
+---
+
+### Verifica campi response
+
+- **`dueDate`** serializzato come stringa ISO 8601 (`"2026-04-14T09:23:51.348Z"`)
+  — conforme alla spec che richiede `dueDate: string`. Mongoose serializza
+  automaticamente i campi `Date` in formato ISO 8601 nel JSON
+- **`dueDate` assente** — quando il campo non è presente, viene omesso
+  completamente dal JSON (non serializzato come `null`) — comportamento
+  corretto per un campo opzionale
+- **`expired`** — calcolato dinamicamente dal virtual Mongoose, non persistito nel DB ✅
+- **`id`** — esposto correttamente al posto di `_id`, `__v` rimosso dal transform ✅
+
+---
+
+### Fix status code — `already-checked.error.ts` / `already-unchecked.error.ts`
+
+#### Problema
+
+I due handler restituivano `401` — status code semanticamente errato.
+`401 Unauthorized` indica mancanza di autenticazione, non un conflitto di stato.
+
+#### Fix
+
+Corretto in `409 Conflict` — semantica corretta: la richiesta è valida
+ma in conflitto con lo stato attuale della risorsa.
+
+Mappa status code rilevanti:
+
+- `400` Bad Request — input invalido
+- `401` Unauthorized — non autenticato
+- `403` Forbidden — autenticato ma non autorizzato
+- `404` Not Found — risorsa non trovata
+- `409` Conflict — richiesta valida ma in conflitto con lo stato attuale
+
+---
+
+### Checklist finale backend
+
+- ✅ Tutti e 4 gli endpoint conformi alla spec
+- ✅ Virtual `expired` dinamico, non persistito
+- ✅ `completed` sempre `false` alla creazione
+- ✅ `showCompleted` gestito come stringa
+- ✅ `toJSON` transform — no `_id`, no `__v`
+- ✅ Validazione input su tutti gli endpoint con `class-validator`
+- ✅ Error handling strutturato a catena con status code corretti
+- ✅ `CheckResult` enum per stati ambigui in `check` e `uncheck`
+- ✅ `dueDate` serializzata come stringa ISO 8601
+- ✅ `dueDate` assente omessa dal JSON (non `null`)
+- ✅ `409 Conflict` per `AlreadyCheckedError` e `AlreadyUncheckedError`

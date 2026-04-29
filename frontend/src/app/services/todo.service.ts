@@ -38,7 +38,7 @@ export class TodoService {
       });
   }
 
-  updateTodoStatus(id: string, completed: boolean) {
+  updateTodoStatus(id: string, completed: boolean, showCompleted: boolean) {
     if (completed) {
       this.http.patch<Todo>(`/api/todos/${id}/check`, null).subscribe((updated) => {
         const index = this.internal().findIndex((todo) => todo.id === id);
@@ -51,7 +51,7 @@ export class TodoService {
         clone[index] = updated;
         this.internal.set(clone);
 
-        this.fetch();
+        this.fetch(showCompleted);
       });
     } else {
       this.http.patch<Todo>(`/api/todos/${id}/uncheck`, null).subscribe((updated) => {
@@ -65,7 +65,7 @@ export class TodoService {
         clone[index] = updated;
         this.internal.set(clone);
 
-        this.fetch();
+        this.fetch(showCompleted);
       });
     }
   }

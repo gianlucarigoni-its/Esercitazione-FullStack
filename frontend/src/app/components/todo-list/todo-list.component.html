@@ -5,7 +5,7 @@
         <input
           class="form-check-input"
           type="checkbox"
-          [checked]="showCompleted"
+          [checked]="showCompleted()"
           (change)="getShowCompleted()"
           id="showCompleted"
         />
@@ -16,7 +16,7 @@
   </div>
   <div class="list-group">
     @for (todo of todoList(); track todo.id) {
-      <app-todo-item [todo]="todo" (onChange)="changeCompleted(todo.id, $event)" />
+      <app-todo-item [todo]="todo" (onChange)="changeStatus(todo.id, $event)" />
     }
   </div>
 </div>
