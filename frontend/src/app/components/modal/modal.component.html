@@ -22,16 +22,19 @@
           <div class="input-group">
             <input
               class="form-control"
+              [class.is-invalid]="dateError()"
               placeholder="yyyy-mm-dd"
               name="dueDate"
               ngbDatepicker
               #dp="ngbDatepicker"
               [ngModel]="dueDateInput()"
-              (ngModelChange)="dueDateInput.set($event)"
+              (ngModelChange)="dueDateInput.set($event ?? undefined)"
             />
             <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
               <i class="bi bi-calendar3"></i>
             </button>
+
+            <div class="invalid-feedback">La data inserita ha un formato non valido!</div>
           </div>
         </div>
       </form>
@@ -40,7 +43,7 @@
       <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">
         <i class="bi bi-x-circle me-1"></i>Cancel
       </button>
-      <button type="button" class="btn btn-primary" (click)="modal.close()">
+      <button type="button" class="btn btn-primary" (click)="createTodo(modal)">
         <i class="bi bi-plus-square me-1"></i>Create
       </button>
     </div>

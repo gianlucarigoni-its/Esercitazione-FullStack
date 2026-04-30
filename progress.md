@@ -939,3 +939,153 @@ Mappa status code rilevanti:
 - ✅ `dueDate` serializzata come stringa ISO 8601
 - ✅ `dueDate` assente omessa dal JSON (non `null`)
 - ✅ `409 Conflict` per `AlreadyCheckedError` e `AlreadyUncheckedError`
+
+## 01/05/2026 — Bug fix: gestione input invalido nel datepicker
+
+### Obiettivo
+
+Chiudere il bug aperto il 23/04: gestione dei valori inattesi emessi da `ngbDatepicker`
+quando l'utente digita a mano nel campo data invece di usare il calendario.
+
+---
+
+### Analisi del bug
+
+#### Valori possibili di `dueDateInput` al momento del submit
+
+| Valore                      | Scenario                           |
+| --------------------------- | ---------------------------------- |
+| `undefined`                 | Campo mai toccato                  |
+| `NgbDateStruct`             | Data valida selezionata dal picker |
+| `null`                      | Campo svuotato dopo input          |
+| `string` (es. `"ciaociao"`) | Testo invalido digitato a mano     |
+
+- `ngModelChange` non emette sempre `null` per input invalidi — emette la stringa grezza digitata
+- Scoperto tramite `console.log('dueDateInput value:', this.dueDateInput())` nei DevTools
+- `typeof null === 'object'` è un bug storico di JavaScript — un check `!== null` da solo non basta
+
+---
+
+### Problemi architetturali identificati e risolti
+
+#### 1. `modal.close()` chiamato prima del check
+
+**Problema:** il check sulla validità della data era dentro `.then()` di `open()`, che si esegue
+_dopo_ che `modal.close()` è già stato chiamato dal template. L'utente non poteva vedere
+l'errore perché il modal era già chiuso.
+
+**Soluzione:** introdotto metodo `createTodo(modal: NgbModalRef)` nel componente.
+Il bottone "Create" nel template chiama `createTodo(modal)` invece di `modal.close()` direttamente.
+`createTodo()` gestisce il check e chiama `modal.close()` solo se la validazione passa.
+
+#### 2. Logica duplicata tra `createTodo()` e `.then()`
+
+**Problema:** dopo lo spostamento della logica in `createTodo()`, il `.then()` di `open()`
+conteneva ancora il vecchio codice con `onAdd.emit()` — la logica veniva eseguita due volte.
+
+**Soluzione:** svuotato completamente il `.then()` e rimosso — rimane solo `.finally()` per il reset.
+
+---
+
+### Modifiche a `modal.component.ts`
+
+#### Nuovo signal `dateError`
+
+```typescript
+dateError = signal<boolean>(false);
+```
+
+- Traccia lo stato di errore della validazione della data
+- Aggiunto al `.finally()` per il reset: `this.dateError.set(false)`
+
+#### `open()` — semplificato
+
+```typescript
+open(content: TemplateRef<any>) {
+  this.modalService
+    .open(content)
+    .result.finally(() => {
+      this.title.set('');
+      this.dueDateInput.set(undefined);
+      this.dateError.set(false);
+    });
+}
+```
+
+- Rimosso `.then()` — tutta la logica è stata spostata in `createTodo()`
+- `.finally()` resetta tutti e tre i signal: `title`, `dueDateInput`, `dateError`
+
+#### `createTodo(modal: NgbModalRef)` — nuovo metodo
+
+```typescript
+createTodo(modal: NgbModalRef) {
+  if ((typeof this.dueDateInput() === 'object' || this.dueDateInput() === undefined) && this.dueDateInput() !== null) {
+    const dueDate =
+      this.dueDateInput() !== undefined ? this.getDate(this.dueDateInput()!) : undefined;
+    this.onAdd.emit({ title: this.title(), dueDate: dueDate });
+    modal.close();
+  } else {
+    this.dateError.set(true);
+  }
+}
+```
+
+- Riceve `NgbModalRef` come parametro (non `NgbModal` — quello è il servizio, questo è l'istanza del modal aperto)
+- Check completo su `dueDateInput()`:
+  - `typeof === 'object'` → cattura `NgbDateStruct` valido
+  - `=== undefined` → cattura campo non toccato
+  - `!== null` → esclude campo svuotato dopo input
+  - Il check su `typeof` esclude anche stringhe invalide (`typeof 'ciaociao' === 'string'`, non `'object'`)
+- Se valido → emette `onAdd` e chiude il modal
+- Se invalido → imposta `dateError` a `true`, il modal rimane aperto
+
+---
+
+### Modifiche a `modal.component.html`
+
+#### Bottone "Create" aggiornato
+
+```html
+<button type="button" class="btn btn-primary" (click)="createTodo(modal)">Create</button>
+```
+
+- `modal` è la variabile locale del template esposta da `let-modal` su `<ng-template>`
+- Non chiama più `modal.close()` direttamente
+
+#### Campo dueDate aggiornato
+
+```html
+<input
+  class="form-control"
+  [class.is-invalid]="dateError()"
+  placeholder="yyyy-mm-dd"
+  name="dueDate"
+  ngbDatepicker
+  #dp="ngbDatepicker"
+  [ngModel]="dueDateInput()"
+  (ngModelChange)="dueDateInput.set($event ?? undefined)"
+/>
+<div class="invalid-feedback">La data inserita ha un formato non valido!</div>
+```
+
+- `[class.is-invalid]="dateError()"` — applica la classe Bootstrap `is-invalid` quando `dateError` è `true`
+- `$event ?? undefined` — operatore nullish coalescing: converte `null` in `undefined` prima di salvarlo nel signal. Necessario perché quando l'utente svuota il campo, `ngModelChange` emette `null` — senza questa conversione il signal resterebbe `null` e il check in `createTodo()` lo rifiuterebbe
+- `<div class="invalid-feedback">` — elemento Bootstrap fratello dell'input, visibile solo quando l'input ha classe `is-invalid`
+
+---
+
+### Concetti appresi
+
+- **`typeof null === 'object'`**: bug storico di JavaScript — `null` non è un oggetto ma `typeof` lo riporta come tale. Qualsiasi check su oggetti deve sempre combinare `typeof === 'object'` con `!== null`
+- **`NgbModal` vs `NgbModalRef`**: `NgbModal` è il servizio iniettabile che apre i modal; `NgbModalRef` è l'istanza del singolo modal aperto — espone `.close()` e `.dismiss()`. Sono tipi distinti
+- **`close()` vs `dismiss()` in NgbModal**: `close()` = azione completata con successo (risolve la Promise); `dismiss()` = azione annullata/abbandonata (rigetta la Promise). La distinzione è semantica e impatta quale callback di `.then(onClose, onDismiss)` viene eseguito
+- **Operatore `??` (nullish coalescing)**: restituisce il valore di destra se il valore di sinistra è `null` o `undefined`. Diverso da `||` che considera falsy anche `0`, `''`, `false`
+- **`invalid-feedback` Bootstrap**: classe per elementi `<div>` fratelli di un input — visibile solo quando l'input ha classe `is-invalid`. Non va applicata all'input stesso
+- **Fail fast lato UI**: intercettare gli errori il prima possibile, nel punto più vicino all'utente — bloccare prima di `modal.close()` invece che dopo
+
+---
+
+### Prossimo step
+
+- Test end-to-end completo del flusso creazione todo
+- Verifica comportamento generale dell'app con backend attivo
