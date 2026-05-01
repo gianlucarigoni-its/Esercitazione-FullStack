@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import type { Todo } from './../entities/todo.entity';
 
 @Injectable({
@@ -17,31 +18,31 @@ export class TodoService {
 
   fetch(showCompleted?: boolean) {
     if (showCompleted) {
-      this.http.get<Todo[]>('api/todos?showCompleted=true').subscribe((items) => {
+      this.http.get<Todo[]>('api/todos?showCompleted=true').subscribe(items => {
         this.internal.set(items);
       });
     } else {
-      this.http.get<Todo[]>('api/todos').subscribe((items) => {
+      this.http.get<Todo[]>('api/todos').subscribe(items => {
         this.internal.set(items);
       });
     }
   }
 
-  addTodo(title: string, dueDate: Date | undefined): void {
-    this.http
-      .post<Todo>(`/api/todos`, {
+  async addTodo(title: string, dueDate: Date | undefined): Promise<Todo> {
+    const newItem = await firstValueFrom(
+      this.http.post<Todo>(`/api/todos`, {
         title: title,
         dueDate: dueDate,
       })
-      .subscribe((newItem) => {
-        this.internal.set([...this.internal(), newItem]);
-      });
+    );
+    this.internal.set([...this.internal(), newItem]);
+    return newItem;
   }
 
   updateTodoStatus(id: string, completed: boolean, showCompleted: boolean) {
     if (completed) {
-      this.http.patch<Todo>(`/api/todos/${id}/check`, null).subscribe((updated) => {
-        const index = this.internal().findIndex((todo) => todo.id === id);
+      this.http.patch<Todo>(`/api/todos/${id}/check`, null).subscribe(updated => {
+        const index = this.internal().findIndex(todo => todo.id === id);
 
         if (index === -1) {
           throw new Error(`Missing item with id ${id}`);
@@ -54,8 +55,8 @@ export class TodoService {
         this.fetch(showCompleted);
       });
     } else {
-      this.http.patch<Todo>(`/api/todos/${id}/uncheck`, null).subscribe((updated) => {
-        const index = this.internal().findIndex((todo) => todo.id === id);
+      this.http.patch<Todo>(`/api/todos/${id}/uncheck`, null).subscribe(updated => {
+        const index = this.internal().findIndex(todo => todo.id === id);
 
         if (index === -1) {
           throw new Error(`Missing item with id ${id}`);

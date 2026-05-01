@@ -1,0 +1,45 @@
+<ng-template #successTpl> Todo created successfully</ng-template>
+<ng-template #dangerTpl> Error: Todo not created</ng-template>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+  @for (toast of toasts(); track toast) {
+    <ngb-toast
+      [class]="toast.classname"
+      [autohide]="true"
+      [delay]="toast.delay || 5000"
+      (hidden)="remove(toast)"
+    >
+      <ng-template [ngTemplateOutlet]="toast.template"></ng-template>
+    </ngb-toast>
+  }
+</div>
+
+<div class="container mt-5 w-50">
+  <div class="m-5 d-flex justify-content-around align-items-center">
+    <div class="shadow p-3 bg-body-tertiary rounded-5">
+      <div class="form-check-reverse form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          [checked]="showCompleted()"
+          (change)="getShowCompleted()"
+          id="showCompleted"
+        />
+        <label class="form-check-label" for="showCompleted"> Show completed Todo </label>
+      </div>
+    </div>
+    <app-modal (onAdd)="addTodo($event.title, $event.dueDate)"></app-modal>
+  </div>
+  <div class="list-group">
+    @if (todoList().length) {
+      @for (todo of todoList(); track todo.id) {
+        <app-todo-item [todo]="todo" (onChange)="changeStatus(todo.id, $event)" />
+      }
+    } @else {
+      <div class="text-center mt-5 p-4 rounded">
+        <h3 class="mt-3">Nessun lavoro per oggi...</h3>
+        <p class="lead">Buon riposo, te lo sei meritato!</p>
+      </div>
+    }
+  </div>
+</div>

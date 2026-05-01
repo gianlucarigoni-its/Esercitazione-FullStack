@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { TodoListComponent } from './pages/todo-list/todo-list.component';
 export const routes: Routes = [
   {
     path: '',

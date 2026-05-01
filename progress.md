@@ -1089,3 +1089,296 @@ createTodo(modal: NgbModalRef) {
 
 - Test end-to-end completo del flusso creazione todo
 - Verifica comportamento generale dell'app con backend attivo
+
+## 01/05/2026 — Test sistematici backend + Fix validazione frontend + Toast UI
+
+### Obiettivo
+
+Testare sistematicamente il backend post-refactoring (validazione con `class-validator`, gestione errori a catena) e il frontend completo, fixare i bug trovati e aggiungere feedback visivo con i toast di ng-bootstrap.
+
+---
+
+### Test backend — risultati
+
+#### `GET /api/todos`
+
+- ✅ Risposta `200` con array di todo non completati per default
+- ✅ `?showCompleted=true` → include anche i completati
+- ✅ `?showCompleted=trueee` (valore non booleano) → `400 ValidationError` — corretto perché `@IsBooleanString()` blocca valori non validi. Comportamento accettabile: dal frontend il valore può essere solo `true`, `false` o assente
+
+#### `POST /api/todos`
+
+- ✅ Body con `title` → `201` con todo creato, `completed: false`, `expired: false`
+- ✅ Body con `title` e `dueDate` ISO 8601 → `201` con `dueDate` nella response
+- ✅ Body `{}` → `400 ValidationError` con messaggio `"title should not be empty, title must be a string"`
+- ✅ Body vuoto (no JSON) → `500` — comportamento accettabile: il frontend non può generare questo scenario, nessun error handler dedicato aggiunto (decisione motivata: no overengineering per caso irraggiungibile)
+- ✅ `title: ""` (stringa vuota) → `400 ValidationError` con `"title should not be empty"`
+- ✅ `dueDate: "aaaaaaa"` (stringa non data) → `400 ValidationError` con `"dueDate must be a Date instance"`
+
+#### Nota sulla timezone
+
+- Inviando `2026-05-28T12:00:00.000` (senza offset), il backend salva e restituisce `2026-05-28T10:00:00.000Z` — differenza di 2 ore dovuta al fuso orario italiano (UTC+2 in ora legale). Comportamento corretto: MongoDB lavora sempre in UTC. Nel progetto non è un problema perché `dueDate` serve solo per calcolare `expired`, non per mostrare un orario preciso.
+
+#### `PATCH /api/todos/:id/check` e `/uncheck`
+
+- ✅ Id valido + todo esistente → `200` con todo aggiornato
+- ✅ Id valido + todo non esistente → `404 NotFoundError`
+- ✅ Id malformato → `400 ValidationError` con `"id must be a mongodb id"` — `@IsMongoId()` blocca prima del DB
+- ✅ Todo già completato → `409 AlreadyChecked`
+- ✅ Todo già non completato → `409 AlreadyUnchecked`
+- ✅ Stesso comportamento verificato per `/uncheck`
+
+---
+
+### Fix frontend — validazione title nel modal
+
+#### Bug trovato
+
+Premendo "Create" con il campo `title` vuoto, il modal si chiudeva e partiva la chiamata API con `title: ""`. Il backend rispondeva `400` ma l'errore finiva solo in console — nessun feedback visivo per l'utente.
+
+#### Causa
+
+Il metodo `createTodo()` validava correttamente la `dueDate` ma non controllava il `title` prima di chiamare `modal.close()` e `onAdd.emit()`.
+
+#### Bug logico corretto
+
+Prima versione errata:
+
+```typescript
+if (this.title() !== null || this.title() !== '')
+```
+
+Questa condizione è sempre `true` — quando `title()` è `''`, il primo ramo `!== null` è già `true` e l'`||` cortocircuita. Corretto in `&&`.
+
+Rimosso anche il check `!== null` su `title()` — ridondante perché `signal<string>('')` non può mai essere `null`.
+
+#### Soluzione finale — `createTodo()` in `modal.component.ts`
+
+```typescript
+createTodo(modal: NgbModalRef) {
+  if (this.title() === '') {
+    this.titleError.set(true);
+  }
+  if (
+    !(
+      (typeof this.dueDateInput() === 'object' || this.dueDateInput() === undefined) &&
+      this.dueDateInput() !== null
+    )
+  ) {
+    this.dateError.set(true);
+  }
+
+  if (!this.dateError() && !this.titleError()) {
+    const dueDate =
+      this.dueDateInput() !== undefined ? this.getDate(this.dueDateInput()!) : undefined;
+    this.onAdd.emit({ title: this.title(), dueDate: dueDate });
+    modal.close();
+  }
+}
+```
+
+- Tre `if` separati e indipendenti — prima imposta tutti gli errori, poi decide se procedere
+- `titleError` e `dateError` sono signal `boolean` — resettati nel `.finally()` di `open()`
+- `modal.close()` chiamato solo se entrambi gli errori sono `false`
+- Gestisce correttamente tutti i casi: tutto vuoto, solo title vuoto, solo data invalida, tutto valido
+
+#### Nuovo signal aggiunto in `modal.component.ts`
+
+```typescript
+titleError = signal<boolean>(false);
+```
+
+Aggiunto al reset nel `.finally()`:
+
+```typescript
+this.titleError.set(false);
+```
+
+#### Template aggiornato in `modal.component.html`
+
+```html
+<input class="form-control" [class.is-invalid]="titleError()" ... />
+<div class="invalid-feedback">Il titolo non può essere vuoto!</div>
+```
+
+---
+
+### Rimozione ridondanza UI
+
+- Rimossa la riga `<div>Complete: {{ todo().completed }}</div>` da `todo-item.component.html` — ridondante perché la checkbox con label "Complete" è già un indicatore visivo chiaro e interattivo dello stato di completamento
+
+---
+
+### Toast feedback — implementazione in `todo-list`
+
+#### Obiettivo
+
+Mostrare un feedback visivo all'utente dopo la creazione di un todo — successo (verde) o errore (rosso).
+
+#### Decisione architetturale: no service dedicato
+
+Per un solo componente che triggera toast, un service globale è overengineering. Il container e la logica dei toast vivono direttamente in `todo-list`.
+
+#### `interface Toast` — definita in `todo-list.component.ts`
+
+```typescript
+export interface Toast {
+  template: TemplateRef<any>;
+  classname?: string;
+  delay?: number;
+}
+```
+
+- `template`: `TemplateRef<any>` — riferimento al blocco `<ng-template>` con il contenuto del toast
+- `classname`: classi Bootstrap per il colore (`bg-success`, `bg-danger`)
+- `delay`: milliseconds prima dell'autohide
+
+#### `@ViewChild` — riferimenti ai template
+
+```typescript
+@ViewChild('successTpl') successTpl!: TemplateRef<any>;
+@ViewChild('dangerTpl') dangerTpl!: TemplateRef<any>;
+```
+
+- `@ViewChild` permette al componente di ottenere un riferimento TypeScript a una template reference variable (`#successTpl`, `#dangerTpl`) definita nel proprio template HTML
+- Disponibile dopo `ngAfterViewInit` — Angular risolve i riferimenti dopo il rendering del template
+
+#### `addTodo()` refactored con `try/catch`
+
+```typescript
+async addTodo(title: string, dueDate?: Date) {
+  try {
+    await this.todoSrv.addTodo(title, dueDate);
+    this.showSuccessToast(this.successTpl);
+  } catch (err) {
+    this.showDangerToast(this.dangerTpl);
+  }
+}
+```
+
+- `try`: se `addTodo()` nel service risolve → toast verde
+- `catch`: se la chiamata HTTP fallisce (errore di rete, `500`, ecc.) → toast rosso
+- La responsabilità è nel componente (UI), non nel service (HTTP)
+
+#### `todoSrv.addTodo()` refactored — da `void` a `Promise<Todo>`
+
+```typescript
+async addTodo(title: string, dueDate: Date | undefined): Promise<Todo> {
+  const newItem = await firstValueFrom(
+    this.http.post<Todo>(`/api/todos`, { title, dueDate })
+  );
+  this.internal.set([...this.internal(), newItem]);
+  return newItem;
+}
+```
+
+- `firstValueFrom` (da `rxjs`): converte un Observable in Promise — si risolve con il primo valore emesso
+- Necessario perché `todo-list` usa `async/await` e non Observable
+- Il service aggiorna comunque lo stato interno prima di ritornare
+
+#### Metodi toast in `todo-list.component.ts`
+
+```typescript
+showSuccessToast(template: TemplateRef<any>) {
+  const toast = { template, classname: 'bg-success text-light', delay: 5000 };
+  this.toasts.update(toasts => [...toasts, toast]);
+}
+
+showDangerToast(template: TemplateRef<any>) {
+  const toast = { template, classname: 'bg-danger text-light', delay: 5000 };
+  this.toasts.update(toasts => [...toasts, toast]);
+}
+
+remove(toast: Toast) {
+  this.toasts.update(toasts => toasts.filter(t => t !== toast));
+}
+```
+
+- `toasts.update()` con spread — immutabilità garantita
+- `remove()` chiamato dall'evento `(hidden)` di `ngb-toast` — rimuove il toast dall'array quando scompare
+
+#### Template toast in `todo-list.component.html`
+
+```html
+<ng-template #successTpl>Todo created successfully</ng-template>
+<ng-template #dangerTpl>Error: Todo not created</ng-template>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+  @for (toast of toasts(); track toast) {
+  <ngb-toast
+    [class]="toast.classname"
+    [autohide]="true"
+    [delay]="toast.delay || 5000"
+    (hidden)="remove(toast)"
+  >
+    <ng-template [ngTemplateOutlet]="toast.template"></ng-template>
+  </ngb-toast>
+  }
+</div>
+```
+
+- `position-fixed top-0 end-0` — toast posizionato in alto a destra, fuori dal flusso del documento
+- `z-index: 1200` — sopra modal e altri elementi
+- `[autohide]="true"` + `[delay]` — scompare automaticamente dopo N ms
+- `(hidden)` — evento emesso da `ngb-toast` quando il toast è sparito → rimuove dall'array
+- `[ngTemplateOutlet]` — renderizza il `TemplateRef` passato come contenuto del toast
+
+#### Imports aggiunti in `todo-list.component.ts`
+
+- `NgbToast` — componente toast di ng-bootstrap
+- `NgTemplateOutlet` — direttiva Angular per renderizzare `TemplateRef` dinamici
+- `ViewChild`, `TemplateRef` — da `@angular/core`
+
+---
+
+### Concetti appresi
+
+- **`@ViewChild`**: decorator Angular che inietta nel componente un riferimento a un elemento del proprio template identificato da una template reference variable (`#nome`). Disponibile dopo `ngAfterViewInit`. Usato per ottenere `TemplateRef` da passare a servizi o componenti esterni
+- **`TemplateRef<any>`**: tipo Angular che rappresenta un blocco `<ng-template>` — non viene renderizzato automaticamente, viene passato esplicitamente a chi deve renderizzarlo (es. `NgbModal`, `NgbToast`, `NgTemplateOutlet`)
+- **`NgTemplateOutlet`**: direttiva Angular che renderizza un `TemplateRef` dinamicamente — `[ngTemplateOutlet]="templateRef"` inserisce il contenuto del template nel punto del DOM dove è dichiarata
+- **`firstValueFrom` (RxJS)**: converte un Observable in Promise — si risolve con il primo valore emesso dall'Observable. Utile per integrare codice RxJS con `async/await`
+- **Responsabilità try/catch**: il service non gestisce errori UI — lascia propagare le eccezioni. Il componente le catcha e decide cosa mostrare. Separazione netta: service = HTTP, componente = UI
+- **`||` vs `&&` nelle condizioni composte**: `||` è vero se almeno una condizione è vera (può cortocircuitare e ignorare la seconda); `&&` richiede che entrambe siano vere. Una condizione `x !== null || x !== ''` è sempre `true` — errore logico comune
+- **Body vuoto → 500**: decisione consapevole di non aggiungere un error handler dedicato per body completamente assente — il frontend non può generare questo scenario, aggiungere codice per un caso irraggiungibile è overengineering
+
+---
+
+### File modificati
+
+- **`frontend/src/app/components/modal/modal.component.ts`** — aggiunto signal `titleError`, logica validazione `title` in `createTodo()`, fix bug logico `||` → `&&`
+- **`frontend/src/app/components/modal/modal.component.html`** — aggiunto `[class.is-invalid]="titleError()"` e `invalid-feedback` per il campo title
+- **`frontend/src/app/components/todo-item/todo-item.component.html`** — rimossa riga ridondante `Complete: {{ todo().completed }}`
+- **`frontend/src/app/components/todo-list/todo-list.component.ts`** — aggiunta `interface Toast`, `@ViewChild` per i template, signal `toasts`, metodi `showSuccessToast`, `showDangerToast`, `remove`, refactoring `addTodo()` con `async/await` e `try/catch`
+- **`frontend/src/app/components/todo-list/todo-list.component.html`** — aggiunto container toast con `ngb-toast`, template `#successTpl` e `#dangerTpl`
+- **`frontend/src/app/services/todo.service.ts`** — refactoring `addTodo()` da `void` a `Promise<Todo>` con `firstValueFrom`
+
+---
+
+### Checklist finale progetto
+
+#### Backend
+
+- ✅ Tutti e 4 gli endpoint conformi alla spec
+- ✅ Virtual `expired` dinamico, non persistito
+- ✅ `completed` sempre `false` alla creazione
+- ✅ `showCompleted` gestito come stringa
+- ✅ `toJSON` transform — no `_id`, no `__v`
+- ✅ Validazione input su tutti gli endpoint con `class-validator`
+- ✅ Error handling strutturato a catena con status code corretti
+- ✅ `CheckResult` enum per stati ambigui in `check` e `uncheck`
+- ✅ `dueDate` serializzata come stringa ISO 8601
+- ✅ `dueDate` assente omessa dal JSON (non `null`)
+- ✅ `409 Conflict` per `AlreadyCheckedError` e `AlreadyUncheckedError`
+
+#### Frontend
+
+- ✅ Lista todo con load iniziale senza completati
+- ✅ Toggle "Show completed" con rifetch
+- ✅ Creazione todo via modal con validazione title e dueDate
+- ✅ Feedback errore inline su title vuoto e data invalida
+- ✅ Toast successo/errore dopo creazione
+- ✅ Toggle completamento per ogni todo con chiamata `/check` o `/uncheck`
+- ✅ Stile differenziato: completato (verde), expired (rosso), normale (bianco)
+- ✅ Componenti separati: `todo-list`, `todo-item`, `todo-modal`
+- ✅ Service Angular per tutte le chiamate HTTP
+- ✅ Stato gestito con Signals

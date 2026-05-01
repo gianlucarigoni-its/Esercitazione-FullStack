@@ -27,12 +27,14 @@ export class ModalComponent {
   private modalService = inject(NgbModal);
 
   dateError = signal<boolean>(false);
+  titleError = signal<boolean>(false);
 
   open(content: TemplateRef<any>) {
     this.modalService.open(content).result.finally(() => {
       this.title.set('');
       this.dueDateInput.set(undefined);
       this.dateError.set(false);
+      this.titleError.set(false);
     });
   }
 
@@ -41,17 +43,46 @@ export class ModalComponent {
   }
 
   createTodo(modal: NgbModalRef) {
-    console.log('dueDateInput value:', this.dueDateInput());
+    this.dateError.set(false);
+    this.titleError.set(false);
+    if (this.title() === '') {
+      this.titleError.set(true);
+    }
     if (
+      !(
+        (typeof this.dueDateInput() === 'object' || this.dueDateInput() === undefined) &&
+        this.dueDateInput() !== null
+      )
+    ) {
+      this.dateError.set(true);
+    }
+
+    if (!this.dateError() && !this.titleError()) {
+      const dueDate =
+        this.dueDateInput() !== undefined ? this.getDate(this.dueDateInput()!) : undefined;
+      this.onAdd.emit({ title: this.title(), dueDate: dueDate });
+      modal.close();
+    }
+
+    /*if (
       (typeof this.dueDateInput() === 'object' || this.dueDateInput() === undefined) &&
-      this.dueDateInput() !== null
+      this.dueDateInput() !== null &&
+      this.title() !== ''
     ) {
       const dueDate =
         this.dueDateInput() !== undefined ? this.getDate(this.dueDateInput()!) : undefined;
       this.onAdd.emit({ title: this.title(), dueDate: dueDate });
       modal.close();
+    } else if (this.title() === '') {
+      this.titleError.set(true);
+    } else if (
+      (typeof this.dueDateInput() !== 'object' && this.dueDateInput() !== undefined) ||
+      this.dueDateInput() === null
+    ) {
+      this.titleError.set(true);
     } else {
+      this.titleError.set(true);
       this.dateError.set(true);
-    }
+    }*/
   }
 }

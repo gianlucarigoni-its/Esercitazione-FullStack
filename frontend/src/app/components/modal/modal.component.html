@@ -9,12 +9,15 @@
           <label class="form-label"> <i class="bi bi-card-text me-1"></i>Title </label>
           <input
             class="form-control"
+            [class.is-invalid]="titleError()"
             type="text"
             placeholder="What do you need to do?"
             [value]="title()"
             (input)="title.set($any($event.target).value)"
           />
+          <div class="invalid-feedback">Il titolo non può essere vuoto!</div>
         </div>
+        <div class="invalid-feedback">Il titolo non può essere vuoto!</div>
         <div class="mb-3">
           <label class="form-label">
             <i class="bi bi-calendar3 me-1"></i>Due date <span class="text-muted">(optional)</span>
